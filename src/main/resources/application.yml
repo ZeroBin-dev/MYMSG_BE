@@ -1,0 +1,30 @@
+spring:
+  message:
+    basename: /
+    encoding: UTF-8
+    always-use-message-format: true
+    use-code-as-default-message: true
+    fallback-to-system-locale: true
+    mvc:
+      throw-exception-if-no-handler-found: true
+
+server:
+  port: 32000
+
+mybatis:
+  config-location: classpath:config/mybatis-config.xml
+  mapper-locations: classpath:mapper/*.xml
+
+---
+spring:
+  config:
+    activate:
+      on-profile: "local"
+
+  datasource:
+    jndi-name: jndi/mariadb
+    # driver-class-name: org.mariadb.jdbc.Driver
+    # url: jdbc:mariadb://192.168.202.13:3306/MYMSG
+    ## username: ${MARIA_DB_USER}
+    # password: ${MARIA_DB_PASS}
+    # jmx-enable: false
