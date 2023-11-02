@@ -5,12 +5,10 @@ import org.apache.catalina.startup.Tomcat;
 import org.apache.tomcat.util.descriptor.web.ContextResource;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.embedded.tomcat.TomcatWebServer;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
-@Configuration
-public class JndiResource {
-  @Bean
+//@Configuration
+public class JndiConfig {
+  //@Bean
   public TomcatServletWebServerFactory tomcatFactory() {
     return new TomcatServletWebServerFactory() {
       @Override

@@ -11,12 +11,4 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/code")
 public class CodeController {
 
-  @ResponseBody
-  @PostMapping(value = "", name = "코드 컨트롤러")
-  public BaseRes codeMain(@RequestBody @Validated BaseReq params) {
-    System.out.println("-- code --");
-
-    return new BaseRes();
-  }
-
 }

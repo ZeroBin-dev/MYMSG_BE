@@ -7,10 +7,9 @@ import lombok.RequiredArgsConstructor;
 public enum CertType {
   PhoneA("certTypePhoneA"),
   PhoneB("certTypePhoneB"),
-  PhoneC("certTypePhoneC"),
-  Ipin("certTypePhoneA"),
-  Card("certTypePhoneA"),
-  Public("certTypePhoneA"),
+  Ipin("certTypeIpin"),
+  Card("certTypeCard"),
+  Public("certTypePublic"),
   Kakao("certTypeKakao");
 
   public final String value;

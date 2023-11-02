@@ -1,4 +1,4 @@
-package com.myapi.mymsgapi.service;
+package com.myapi.mymsgapi.service.comm;
 
 import com.myapi.mymsgapi.dao.CommDAO;
 import com.myapi.mymsgapi.contoller.comm.dto.CnstReq;

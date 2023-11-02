@@ -3,18 +3,20 @@ package com.myapi.mymsgapi.contoller.comm;
 import com.myapi.mymsgapi.comm.constants.Constants;
 import com.myapi.mymsgapi.contoller.comm.dto.BaseReq;
 import com.myapi.mymsgapi.contoller.comm.dto.BaseRes;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/main")
 public class MainController {
 
   @ResponseBody
-  @PostMapping(value = "", name = "메인 페이지")
+  @PostMapping(value = "")
+  @Operation(summary = "메인", description = "메인페이지 조회")
   public BaseRes userMain(@RequestBody @Validated BaseReq params) {
     System.out.println("-- main --");
     System.out.println(System.getenv().get("MARIA_DB_USER"));
