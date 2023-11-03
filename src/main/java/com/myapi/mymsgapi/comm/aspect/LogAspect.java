@@ -26,15 +26,15 @@ public class LogAspect {
 
     long startAt = System.currentTimeMillis();
 
-    log.info("-----------> REQUEST : {}({}) = {}", pjp.getSignature().getDeclaringTypeName(),
-            pjp.getSignature().getName(), params);
+//    log.info("-----------> REQUEST : {}({}) = {}", pjp.getSignature().getDeclaringTypeName(),
+//            pjp.getSignature().getName(), params);
 
     Object result = pjp.proceed(); // 4
 
     long endAt = System.currentTimeMillis();
 
-    log.info("-----------> RESPONSE : {}({}) = {} ({}ms)", pjp.getSignature().getDeclaringTypeName(),
-            pjp.getSignature().getName(), result.toString(), endAt - startAt);
+//    log.info("-----------> RESPONSE : {}({}) = {} ({}ms)", pjp.getSignature().getDeclaringTypeName(),
+//            pjp.getSignature().getName(), result.toString(), endAt - startAt);
 
     return result;
   }

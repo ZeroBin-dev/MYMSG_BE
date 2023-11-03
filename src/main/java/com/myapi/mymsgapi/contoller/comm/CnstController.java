@@ -5,10 +5,11 @@ import com.myapi.mymsgapi.contoller.comm.dto.CnstRes;
 import com.myapi.mymsgapi.service.comm.CnstService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
+@Controller
 @RequiredArgsConstructor
 @RequestMapping(value = "/cnst")
 public class CnstController {

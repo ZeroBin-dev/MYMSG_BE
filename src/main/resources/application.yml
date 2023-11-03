@@ -1,12 +1,17 @@
 spring:
   message:
-    basename: /
+    basename: /message/errorMsg
     encoding: UTF-8
     always-use-message-format: true
     use-code-as-default-message: true
     fallback-to-system-locale: true
     mvc:
       throw-exception-if-no-handler-found: true
+  thymeleaf:
+    suffix: .html
+    cache: false
+  servlet:
+    context-path=
 
 server:
   port: 32000
@@ -14,6 +19,7 @@ server:
 mybatis:
   config-location: classpath:config/mybatis-config.xml
   mapper-locations: classpath:mapper/*.xml
+
 
 ---
 spring:

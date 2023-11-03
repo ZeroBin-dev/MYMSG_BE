@@ -24,28 +24,41 @@ repositories {
 }
 
 dependencies {
+	// basic
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.0'
-	implementation 'org.mariadb.jdbc:mariadb-java-client:3.0.4'
-	implementation 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:1.16'
-	implementation 'com.google.code.gson:gson:2.9.0'
-	implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.7.1'
-	implementation 'jakarta.servlet:jakarta.servlet-api'
-	implementation 'org.apache.commons:commons-dbcp2'
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
-	implementation 'com.google.guava:guava:11.0.2'
 	implementation 'org.springframework.boot:spring-boot-starter-aop'
-	implementation 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4:1.16'
-	implementation 'org.springframework.boot:spring-boot-starter-data-redis:3.1.5'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'jakarta.servlet:jakarta.servlet-api'
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
-	implementation 'org.springframework.boot:spring-boot-starter-websocket:3.1.2'
 
 	annotationProcessor 'org.projectlombok:lombok'
 	compileOnly 'org.projectlombok:lombok'
-
-	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
-
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	// DB
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis:3.1.5'
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.0'
+	implementation 'org.mariadb.jdbc:mariadb-java-client:3.0.4'
+	implementation 'org.apache.commons:commons-dbcp2'
+
+	// websocket
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+	implementation 'org.webjars:sockjs-client:1.1.2'
+	implementation 'org.webjars:stomp-websocket:2.3.3-1'
+
+	// view
+	implementation 'org.webjars.bower:bootstrap:4.3.1'
+	implementation 'org.webjars.bower:axios:0.21.1'
+	implementation 'org.webjars:sockjs-client:1.1.2'
+	implementation 'org.webjars.bower:vue:2.5.16'
+
+	// util
+	implementation 'com.google.code.gson:gson:2.9.0'
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.7.1'
+	implementation 'com.google.guava:guava:11.0.2'
+	implementation 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4:1.16'
+
 }
 
 tasks.named('test') {

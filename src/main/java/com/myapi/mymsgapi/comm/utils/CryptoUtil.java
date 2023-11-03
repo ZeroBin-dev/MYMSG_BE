@@ -8,7 +8,7 @@ import java.util.Base64;
 public class CryptoUtil {
 
   private static final String key = "54863115488974651235547863215531"; // 32자리난수
-  private static final String iv = key.substring(0, 16); // 16byte
+  private static final String iv = key.substring(0, 16); // 16byte<
 
   /**
    * AES256 암호화
