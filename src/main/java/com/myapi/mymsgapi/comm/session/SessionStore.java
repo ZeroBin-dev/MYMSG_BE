@@ -1,6 +1,7 @@
 package com.myapi.mymsgapi.comm.session;
 
-import com.myapi.mymsgapi.comm.exception.MyBizException;
+import com.myapi.mymsgapi.comm.exception.ApiException;
+import com.myapi.mymsgapi.comm.types.ExceptType;
 import com.myapi.mymsgapi.comm.utils.HttpRequestUtils;
 import jakarta.servlet.http.HttpSession;
 
@@ -16,7 +17,7 @@ public class SessionStore {
 
   public static void put(final SessionKeys sessionKeys, final Object object) {
     if (!sessionKeys.usageClass.isInstance(object)) {
-      throw new MyBizException("세션 타입이 일치하지 않습니다.");
+      throw new ApiException(ExceptType.SESS001); // 세션타입이 일치하지 않습니다.
       //throw new ApiException(SystemErrorCode.NO_MATCHING_ERROR);
     }
     getSession().setAttribute(sessionKeys.name(), object);
@@ -28,7 +29,7 @@ public class SessionStore {
 
   public static <T> T getAs(SessionKeys sessionKeys, final Class<T> clazz) {
     if (!sessionKeys.usageClass.getClass().isInstance(clazz)) {
-      throw new MyBizException("세션 타입이 일치하지 않습니다.");
+      throw new ApiException(ExceptType.SESS001); // 세션타입이 일치하지 않습니다.
       //throw new ApiException(SystemErrorCode.NO_MATCHING_ERROR);
     }
     return (T) get(sessionKeys);
