@@ -28,14 +28,19 @@ public class MessageFilter implements Filter {
     chain.doFilter(requestWrapper, responseWrapper);
 
     byte[] responseArray = responseWrapper.getContentAsByteArray();
-    String responseStr = new String(responseArray, responseWrapper.getCharacterEncoding());
+    String responseStr = new String(responseArray, "UTF-8");
 
     JsonNode node = new ObjectMapper().readTree(responseStr);
 
     // TODO : 메세지 정의
-    ((ObjectNode)node).put("status", "success");
-    ((ObjectNode)node).put("message", "성공");
-    //((ObjectNode)node).put("result", node);
+    String status = node.path("status").asText();
+    if("error".equals(status)){
+
+    } else {
+      ((ObjectNode)node).put("status", "success");
+      ((ObjectNode)node).put("message", "성공");
+      //((ObjectNode)node).put("result", node);
+    }
 
     String newResponse = new ObjectMapper().writeValueAsString(node);
     response.setContentType("application/json");

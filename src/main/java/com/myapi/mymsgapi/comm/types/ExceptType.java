@@ -1,9 +1,11 @@
 package com.myapi.mymsgapi.comm.types;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 @Getter
+@JsonFormat(shape = JsonFormat.Shape.OBJECT) // ENUM 클래서 한글사용
 public enum ExceptType {
 
   /******************/
