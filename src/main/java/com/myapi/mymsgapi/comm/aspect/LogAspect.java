@@ -22,6 +22,8 @@ public class LogAspect {
   @Around("within(com.myapi.mymsgapi..*)")
   public Object logging(ProceedingJoinPoint pjp) throws Throwable { // 2
 
+    // TODO : 다시 작성 필요
+    
     String params = getRequestParams(); // request 값 가져오기
 
     long startAt = System.currentTimeMillis();

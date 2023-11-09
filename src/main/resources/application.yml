@@ -10,8 +10,6 @@ spring:
   thymeleaf:
     suffix: .html
     cache: false
-  servlet:
-    context-path=
 
 server:
   port: 32000
@@ -19,7 +17,6 @@ server:
 mybatis:
   config-location: classpath:config/mybatis-config.xml
   mapper-locations: classpath:mapper/*.xml
-
 
 ---
 spring:
