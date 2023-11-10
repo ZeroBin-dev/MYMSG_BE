@@ -11,8 +11,13 @@ spring:
     suffix: .html
     cache: false
 
+
 server:
   port: 32000
+  servlet:
+    context-path:
+    encoding:
+      charset: UTF-8
 
 mybatis:
   config-location: classpath:config/mybatis-config.xml
@@ -27,7 +32,7 @@ spring:
   datasource:
     #jndi-name: jndi/mariadb
     driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
-    url: jdbc:log4jdbc:mariadb://192.168.202.13:3306/MYMSG
+    url: jdbc:log4jdbc:mariadb://192.168.202.13:3306/MYMSG?useUnicode=true&characterEncoding=utf8
     username: ${MARIA_DB_USER}
     password: ${MARIA_DB_PASS}
     jmx-enable: false
@@ -41,3 +46,6 @@ spring:
     port: 6379
     host: 192.168.202.13
     password: admin
+
+  file:
+    base-path: "D:\\cyb\\images\\profile\\"

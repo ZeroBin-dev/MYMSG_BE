@@ -7,6 +7,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class BaseReq {
+public class BaseRequest {
 
 }

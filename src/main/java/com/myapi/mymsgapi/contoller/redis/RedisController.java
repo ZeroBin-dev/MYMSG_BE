@@ -1,15 +1,12 @@
 package com.myapi.mymsgapi.contoller.redis;
 
-import com.myapi.mymsgapi.contoller.comm.dto.CnstReq;
-import com.myapi.mymsgapi.contoller.comm.dto.CnstRes;
-import com.myapi.mymsgapi.contoller.redis.dto.RedisGetReq;
-import com.myapi.mymsgapi.contoller.redis.dto.RedisGetRes;
-import com.myapi.mymsgapi.contoller.redis.dto.RedisSetReq;
-import com.myapi.mymsgapi.contoller.redis.dto.RedisSetRes;
+import com.myapi.mymsgapi.contoller.redis.dto.RedisGetRequest;
+import com.myapi.mymsgapi.contoller.redis.dto.RedisGetResponse;
+import com.myapi.mymsgapi.contoller.redis.dto.RedisSetRequest;
+import com.myapi.mymsgapi.contoller.redis.dto.RedisSetResponse;
 import com.myapi.mymsgapi.service.redis.RedisService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,14 +20,14 @@ public class RedisController {
   @ResponseBody
   @PostMapping(value="/set")
   @Operation(summary = "redis", description = "redis 데이터 입력")
-  public RedisSetRes redisSet(@RequestBody @Validated RedisSetReq params){
+  public RedisSetResponse redisSet(@RequestBody @Validated RedisSetRequest params){
     return _redisService.redisSet(params);
   }
 
   @ResponseBody
   @PostMapping(value="/get")
   @Operation(summary = "redis", description = "redis 데이터 가져오기")
-  public RedisGetRes redisGet(@RequestBody @Validated RedisGetReq params){
+  public RedisGetResponse redisGet(@RequestBody @Validated RedisGetRequest params){
     return _redisService.redisGet(params);
   }
 

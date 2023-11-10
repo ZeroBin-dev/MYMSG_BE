@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CnstRes extends BaseRes {
+public class CnstResponse extends BaseResponse {
 
   private String cnstVl;
 }

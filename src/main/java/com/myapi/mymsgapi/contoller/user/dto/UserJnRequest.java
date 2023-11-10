@@ -1,19 +1,28 @@
 package com.myapi.mymsgapi.contoller.user.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.myapi.mymsgapi.contoller.comm.dto.BaseReq;
+import com.myapi.mymsgapi.contoller.comm.dto.BaseRequest;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * 회원가입 request
+ */
+
 @Getter
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class UserLoginReq extends BaseReq {
-
+public class UserJnRequest extends BaseRequest {
   @NotEmpty
   private String userId; // 사용자ID
 
   @NotEmpty
-  private String userPw; // 사용자PW
+  private String userPw; // 사용자 비밀번호
+
+  @NotEmpty
+  private String userPwChk; // 사용자 비밀번호 확인
+
+  @NotEmpty
+  private String userName; // 사용자 이름
 }

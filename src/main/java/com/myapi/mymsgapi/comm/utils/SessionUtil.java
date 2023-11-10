@@ -11,6 +11,10 @@ public class SessionUtil {
     return ObjectUtil.isEmpty(userVO) ? new UserVO() : userVO;
   }
 
+  public static void setUserVO(UserVO userVO) {
+    SessionStore.put(SessionKeys.USER_VO, userVO);
+  }
+
   public static boolean isLogin() {
     return "Y".equals(getUserVO().getLoginYn());
   }

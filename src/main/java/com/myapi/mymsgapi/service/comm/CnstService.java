@@ -1,8 +1,8 @@
 package com.myapi.mymsgapi.service.comm;
 
-import com.myapi.mymsgapi.dao.CommDAO;
-import com.myapi.mymsgapi.contoller.comm.dto.CnstReq;
-import com.myapi.mymsgapi.contoller.comm.dto.CnstRes;
+import com.myapi.mymsgapi.dao.comm.CommDAO;
+import com.myapi.mymsgapi.contoller.comm.dto.CnstRequest;
+import com.myapi.mymsgapi.contoller.comm.dto.CnstResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +15,7 @@ public class CnstService {
   /**
    * 공통 상수 조회
    */
-  public CnstRes cnstInf(final CnstReq params) {
+  public CnstResponse cnstInf(final CnstRequest params) {
     return _commDAO.selectCnstCd(params);
   }
 

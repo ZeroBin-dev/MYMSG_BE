@@ -7,9 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class BaseRes {
+public class BaseResponse {
   private String resultCd = "200";
   private String errorYn = "N";
-  private String errorCd;
-  private String errorMsg;
 }

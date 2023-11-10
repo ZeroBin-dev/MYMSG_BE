@@ -1,16 +1,15 @@
 package com.myapi.mymsgapi.contoller.redis.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.myapi.mymsgapi.contoller.comm.dto.BaseReq;
+import com.myapi.mymsgapi.contoller.comm.dto.BaseRequest;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
-import org.springframework.stereotype.Service;
+import lombok.Setter;
 
 @Getter
-@Service
+@Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class RedisSetReq extends BaseReq {
+public class RedisGetRequest extends BaseRequest {
   @NotEmpty
   private String key;
-  private String value;
 }

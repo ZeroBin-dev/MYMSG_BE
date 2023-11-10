@@ -15,7 +15,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-@Component
+// TODO : 메시지 필터 수정 예정 ㅠㅠ
+// @Component
 public class MessageFilter implements Filter {
 
   @Override

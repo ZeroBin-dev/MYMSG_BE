@@ -1,9 +1,9 @@
 package com.myapi.mymsgapi.service.redis;
 
-import com.myapi.mymsgapi.contoller.redis.dto.RedisGetReq;
-import com.myapi.mymsgapi.contoller.redis.dto.RedisGetRes;
-import com.myapi.mymsgapi.contoller.redis.dto.RedisSetReq;
-import com.myapi.mymsgapi.contoller.redis.dto.RedisSetRes;
+import com.myapi.mymsgapi.contoller.redis.dto.RedisGetRequest;
+import com.myapi.mymsgapi.contoller.redis.dto.RedisGetResponse;
+import com.myapi.mymsgapi.contoller.redis.dto.RedisSetRequest;
+import com.myapi.mymsgapi.contoller.redis.dto.RedisSetResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -18,8 +18,8 @@ public class RedisService {
   /**
    * redis set
    */
-  public RedisSetRes redisSet(final RedisSetReq params) {
-    RedisSetRes res = new RedisSetRes();
+  public RedisSetResponse redisSet(final RedisSetRequest params) {
+    RedisSetResponse res = new RedisSetResponse();
     res.setSuccYn("N");
 
     ValueOperations<String, String> vop = redisTemplate.opsForValue();
@@ -33,8 +33,8 @@ public class RedisService {
   /**
    * redis get
    */
-  public RedisGetRes redisGet(final RedisGetReq params) {
-    RedisGetRes res = new RedisGetRes();
+  public RedisGetResponse redisGet(final RedisGetRequest params) {
+    RedisGetResponse res = new RedisGetResponse();
     res.setValue("");
 
     ValueOperations<String, String> vop = redisTemplate.opsForValue();

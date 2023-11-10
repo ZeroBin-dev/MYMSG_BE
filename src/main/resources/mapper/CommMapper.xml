@@ -2,9 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.myapi.mymsgapi.dao.CommDAO">
+<mapper namespace="com.myapi.mymsgapi.dao.comm.CommDAO">
 
-  <select id="selectCnstCd" parameterType="com.myapi.mymsgapi.contoller.comm.dto.CnstReq" resultType="com.myapi.mymsgapi.contoller.comm.dto.CnstRes">
+  <select id="selectCnstCd" parameterType="com.myapi.mymsgapi.contoller.comm.dto.CnstRequest" resultType="com.myapi.mymsgapi.contoller.comm.dto.CnstResponse">
     /* 공통상수조회 */
     SELECT
       CNST_VL

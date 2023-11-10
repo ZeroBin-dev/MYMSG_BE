@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CnstReq extends BaseReq{
+public class CnstRequest extends BaseRequest {
 
   @NotEmpty
   private String cnstCd; // 상수코드

@@ -22,6 +22,12 @@ public enum ExceptType {
   // 로그인
   LGIN001(HttpStatus.UNAUTHORIZED, "LGIN001", "로그인이 필요합니다."),
 
+  // 회원가입
+  JOIN001(HttpStatus.UNAUTHORIZED, "JOIN001", "회원가입에 실패하였습니다."),
+  JOIN002(HttpStatus.UNAUTHORIZED, "JOIN002", "비밀번호가 일치 하지 않습니다."),
+  JOIN003(HttpStatus.UNAUTHORIZED, "JOIN003", "유효한 형태의 ID 또는 이름이 아닙니다."),
+  JOIN004(HttpStatus.UNAUTHORIZED, "JOIN004", "중복된 ID 입니다."),
+
   // 세션
   SESS001(HttpStatus.UNAUTHORIZED, "SESS001", "세션 타입이 일치하지 않습니다.");
 

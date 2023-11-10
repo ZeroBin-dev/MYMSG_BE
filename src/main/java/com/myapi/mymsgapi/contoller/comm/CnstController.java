@@ -1,7 +1,7 @@
 package com.myapi.mymsgapi.contoller.comm;
 
-import com.myapi.mymsgapi.contoller.comm.dto.CnstReq;
-import com.myapi.mymsgapi.contoller.comm.dto.CnstRes;
+import com.myapi.mymsgapi.contoller.comm.dto.CnstRequest;
+import com.myapi.mymsgapi.contoller.comm.dto.CnstResponse;
 import com.myapi.mymsgapi.service.comm.CnstService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ public class CnstController {
   @ResponseBody
   @PostMapping(value = "/inf")
   @Operation(summary = "공통 상수", description = "공통 상수 조회")
-  public CnstRes cnstInf(@RequestBody @Validated CnstReq params) {
+  public CnstResponse cnstInf(@RequestBody @Validated CnstRequest params) {
     return _cnstService.cnstInf(params);
   }
 
