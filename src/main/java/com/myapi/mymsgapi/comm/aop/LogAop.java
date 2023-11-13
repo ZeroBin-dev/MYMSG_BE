@@ -1,4 +1,4 @@
-package com.myapi.mymsgapi.comm.aspect;
+package com.myapi.mymsgapi.comm.aop;
 
 import com.google.common.base.Joiner;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,13 +17,12 @@ import java.util.stream.Collectors;
 @Component
 @Aspect
 @Slf4j
-public class LogAspect {
+public class LogAop {
 
   @Around("within(com.myapi.mymsgapi..*)")
   public Object logging(ProceedingJoinPoint pjp) throws Throwable { // 2
 
     // TODO : 다시 작성 필요
-    
     String params = getRequestParams(); // request 값 가져오기
 
     long startAt = System.currentTimeMillis();

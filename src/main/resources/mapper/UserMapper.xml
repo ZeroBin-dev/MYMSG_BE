@@ -4,7 +4,46 @@
 
 <mapper namespace="com.myapi.mymsgapi.dao.user.UserDAO">
 
-  <insert id="insertUser" parameterType="com.myapi.mymsgapi.contoller.user.dto.UserJnRequest">
+  <select id="selectLoginUser" parameterType="com.myapi.mymsgapi.contoller.user.dto.UserLginReq"
+          resultType="com.myapi.mymsgapi.model.UserLginInfo">
+    /* 아이디 로그인 */
+    SELECT
+    USER_ID
+    ,USER_NAME
+    ,PW_ERR_CNT
+    ,PROFILE_PATH
+    FROM USER_MASTER
+    WHERE 1=1
+    AND USER_ID = #{userId}
+    AND USER_PW = #{userPw}
+  </select>
+
+  <update id="updateErrorCount" parameterType="com.myapi.mymsgapi.contoller.user.dto.UserLginReq">
+    UPDATE USER_MASTER
+    SET PW_ERR_CNT = PW_ERR_CNT + 1
+    WHERE USER_ID = #{userId}
+  </update>
+
+  <update id="updateErrorCountZero" parameterType="com.myapi.mymsgapi.contoller.user.dto.UserLginReq">
+    UPDATE USER_MASTER
+    SET PW_ERR_CNT = 0
+    WHERE USER_ID = #{userId}
+  </update>
+
+  <insert id="insertLoginUserHist" parameterType="com.myapi.mymsgapi.model.UserLginHistVO">
+    /* 로그인 이력 쌓기 */
+    INSERT INTO USER_LOGIN_HISTORY(
+    USER_ID
+    ,IP_ADDR
+    ,REG_DT
+    ) VALUES (
+    #{userId}
+    ,#{ipAddr}
+    ,now()
+    )
+  </insert>
+
+  <insert id="insertUser" parameterType="com.myapi.mymsgapi.contoller.user.dto.UserRegsReq">
     /* 회원가입 */
     INSERT INTO USER_MASTER(
     USER_ID
@@ -28,8 +67,8 @@
     SELECT
     COUNT(*) AS CNT
     FROM USER_MASTER
-    WHERE
-    USER_ID = #{userId}
+    WHERE 1=1
+    AND USER_ID = #{userId}
   </select>
 
 </mapper>

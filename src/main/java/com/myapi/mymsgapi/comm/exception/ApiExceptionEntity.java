@@ -1,4 +1,4 @@
-package com.myapi.mymsgapi.comm.entity;
+package com.myapi.mymsgapi.comm.exception;
 
 import lombok.Builder;
 import lombok.Getter;

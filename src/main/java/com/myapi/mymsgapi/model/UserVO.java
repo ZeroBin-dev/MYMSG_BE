@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.List;
 
 @Getter
 @Setter
@@ -14,8 +15,8 @@ public class UserVO implements Serializable {
   @Serial
   private static final long serialVersionUID = 2359662639401792272L;
 
-  private String loginYn = "N";
-  private String userId;
-  private String userName;
+  private String lginYn;
+  private UserLginInfo lginData;
+  private List<UserRoomInfo> roomList;
 
 }

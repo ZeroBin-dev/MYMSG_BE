@@ -12,4 +12,8 @@ public class ObjectUtil {
     return !ObjectUtils.isEmpty(obj);
   }
 
+  public static Object nvl(Object obj, String defaultValue) {
+    return isNotEmpty(obj) ? obj : defaultValue;
+  }
+
 }

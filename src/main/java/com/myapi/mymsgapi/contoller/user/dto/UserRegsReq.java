@@ -1,7 +1,7 @@
 package com.myapi.mymsgapi.contoller.user.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.myapi.mymsgapi.contoller.comm.dto.BaseRequest;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,7 +13,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class UserJnRequest extends BaseRequest {
+public class UserRegsReq extends BaseRequest {
   @NotEmpty
   private String userId; // 사용자ID
 

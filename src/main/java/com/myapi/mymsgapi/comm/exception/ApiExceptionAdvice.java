@@ -1,9 +1,6 @@
-package com.myapi.mymsgapi.comm.advice;
+package com.myapi.mymsgapi.comm.exception;
 
-import com.myapi.mymsgapi.comm.exception.ApiException;
 import com.myapi.mymsgapi.comm.types.ExceptType;
-import com.myapi.mymsgapi.comm.entity.ApiExceptionEntity;
-import com.myapi.mymsgapi.comm.entity.ApiResult;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -14,8 +11,8 @@ import java.nio.file.AccessDeniedException;
 @ControllerAdvice
 public class ApiExceptionAdvice {
 
-  @ExceptionHandler({ApiException.class})
-  public ResponseEntity<ApiResult> exceptionHandler(HttpServletRequest request, final ApiException e) {
+  @ExceptionHandler({YbBizException.class})
+  public ResponseEntity<ApiResult> exceptionHandler(HttpServletRequest request, final YbBizException e) {
 
     ApiExceptionEntity apiExceptionEntity = ApiExceptionEntity.builder()
             .errorCode(e.getError().getCode())

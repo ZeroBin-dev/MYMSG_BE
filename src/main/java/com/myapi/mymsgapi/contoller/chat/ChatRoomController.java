@@ -1,20 +1,32 @@
 package com.myapi.mymsgapi.contoller.chat;
 
+import com.myapi.mymsgapi.contoller.chat.dto.ChatUserJoinReq;
+import com.myapi.mymsgapi.contoller.chat.dto.ChatUserJoinRes;
+import com.myapi.mymsgapi.contoller.user.dto.UserLginReq;
 import com.myapi.mymsgapi.model.ChatRoom;
+import com.myapi.mymsgapi.model.UserVO;
 import com.myapi.mymsgapi.service.chat.ChatService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping(value = "/chat")
 public class ChatRoomController {
 
   private final ChatService _chatService;
+
+  @ResponseBody
+  @PostMapping(value = "/chat/userJoin")
+  @Operation(summary = "채팅방 입장", description = "사용자 채팅방 입장")
+  public ChatUserJoinRes chatUserJoin(@RequestBody @Validated ChatUserJoinReq params) {
+    return _chatService.chatUserJoin(params);
+  }
 
   // 채팅 리스트 화면
   @GetMapping("/room")

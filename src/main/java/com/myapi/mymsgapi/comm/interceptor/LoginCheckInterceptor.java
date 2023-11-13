@@ -1,7 +1,7 @@
 package com.myapi.mymsgapi.comm.interceptor;
 
 import com.myapi.mymsgapi.comm.annotation.LoginCheck;
-import com.myapi.mymsgapi.comm.exception.ApiException;
+import com.myapi.mymsgapi.comm.exception.YbBizException;
 import com.myapi.mymsgapi.comm.types.ExceptType;
 import com.myapi.mymsgapi.comm.utils.SessionUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,7 +22,7 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
       if (SessionUtil.isLogin()) {
         return true;
       } else {
-        throw new ApiException(ExceptType.LGIN001); // 로그인이 필요합니다.
+        throw new YbBizException(ExceptType.LGIN001); // 로그인이 필요합니다.
       }
     }
 

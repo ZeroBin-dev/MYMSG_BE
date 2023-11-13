@@ -1,5 +1,10 @@
 package com.myapi.mymsgapi.comm.utils;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.myapi.mymsgapi.comm.fundamental.YBMap;
+
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -29,6 +34,13 @@ public class StringUtil {
 
     // 모든 value 값이 n 이하인지 확인
     return countMap.values().stream().allMatch(value -> value <= limit);
+  }
+
+  public static JsonObject toJson(final String p) {
+    JsonParser jsonParser = new JsonParser();
+    Object obj = jsonParser.parse(p);
+    JsonObject jo = (JsonObject) obj;
+    return jo;
   }
 
 }

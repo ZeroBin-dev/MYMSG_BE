@@ -4,10 +4,10 @@ import com.myapi.mymsgapi.comm.types.ExceptType;
 import lombok.Getter;
 
 @Getter
-public class ApiException extends RuntimeException {
+public class YbBizException extends RuntimeException {
   private ExceptType error;
 
-  public ApiException(ExceptType e) {
+  public YbBizException(ExceptType e) {
     super(e.getMessage());
     this.error = e;
   }

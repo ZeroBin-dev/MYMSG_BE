@@ -16,7 +16,7 @@ public class SessionUtil {
   }
 
   public static boolean isLogin() {
-    return "Y".equals(getUserVO().getLoginYn());
+    return "Y".equals(getUserVO().getLginYn());
   }
 
 }

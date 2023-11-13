@@ -1,8 +1,8 @@
 package com.myapi.mymsgapi.service.comm;
 
-import com.myapi.mymsgapi.dao.comm.CommDAO;
 import com.myapi.mymsgapi.contoller.comm.dto.CnstRequest;
 import com.myapi.mymsgapi.contoller.comm.dto.CnstResponse;
+import com.myapi.mymsgapi.dao.comm.CommDAO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

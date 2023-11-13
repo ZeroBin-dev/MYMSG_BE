@@ -1,14 +1,14 @@
 package com.myapi.mymsgapi.comm.session;
 
-import com.myapi.mymsgapi.comm.exception.ApiException;
+import com.myapi.mymsgapi.comm.exception.YbBizException;
 import com.myapi.mymsgapi.comm.types.ExceptType;
-import com.myapi.mymsgapi.comm.utils.HttpRequestUtils;
+import com.myapi.mymsgapi.comm.utils.HttpRequestUtil;
 import jakarta.servlet.http.HttpSession;
 
 public class SessionStore {
 
   private static HttpSession getSession() {
-    return HttpRequestUtils.getSession();
+    return HttpRequestUtil.getSession();
   }
 
   private static boolean exists(final SessionKeys sessionKeys) {
@@ -17,7 +17,7 @@ public class SessionStore {
 
   public static void put(final SessionKeys sessionKeys, final Object object) {
     if (!sessionKeys.usageClass.isInstance(object)) {
-      throw new ApiException(ExceptType.SESS001); // 세션타입이 일치하지 않습니다.
+      throw new YbBizException(ExceptType.SESS001); // 세션타입이 일치하지 않습니다.
     }
     getSession().setAttribute(sessionKeys.name(), object);
   }
@@ -28,7 +28,7 @@ public class SessionStore {
 
   public static <T> T getAs(SessionKeys sessionKeys, final Class<T> clazz) {
     if (!sessionKeys.usageClass.getClass().isInstance(clazz)) {
-      throw new ApiException(ExceptType.SESS001); // 세션타입이 일치하지 않습니다.
+      throw new YbBizException(ExceptType.SESS001); // 세션타입이 일치하지 않습니다.
     }
     return (T) get(sessionKeys);
   }

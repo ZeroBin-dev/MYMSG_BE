@@ -1,5 +1,6 @@
 package com.myapi.mymsgapi.comm.utils;
 
+import com.myapi.mymsgapi.comm.fundamental.YBMap;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 
@@ -31,10 +32,10 @@ public class MapUtil {
   }
 
   // DTO -> Map
-  public static Map toMap(final Object p) {
+  public static YBMap toMap(final Object p) {
     Gson gson = new Gson();
     String json = gson.toJson(p);
-    Map result = gson.fromJson(json, Map.class);
+    YBMap result = gson.fromJson(json, YBMap.class);
     return result;
   }
 
