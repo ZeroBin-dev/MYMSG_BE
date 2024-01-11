@@ -1,6 +1,9 @@
 package com.myapi.mymsgapi.service.redis;
 
+import com.google.gson.JsonObject;
+import com.myapi.mymsgapi.comm.utils.ObjectUtil;
 import com.myapi.mymsgapi.comm.utils.StringUtil;
+import com.myapi.mymsgapi.dao.room.RoomDAO;
 import com.myapi.mymsgapi.model.UserRoomInfo;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
@@ -9,50 +12,42 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class RedisService {
 
-  private final RedisTemplate<String, String> redisTemplate;
+  private final RoomDAO roomDAO;
 
-  /**
-   * 유저별 채팅방 정보 생성
-   */
-  public String setUserRoom(final String userId) {
-    redisSet(userId, "test", true);
-    return "";
-  }
+  private final RedisTemplate<String, String> redisTemplate;
 
   /**
    * 유저별 채팅방 정보 가져오기
    */
   public List<UserRoomInfo> getUserRoomList(final String userId) {
-    List<UserRoomInfo> userRoomList = new ArrayList<>();
+    // userId 로 현재 참여중인 방번호 찾기
+    List<UserRoomInfo> roomInfos = roomDAO.selectRoomList(userId);
 
-    JSONArray roomResult = redisGetJsonArray(userId, "roomInfo");
-
-    for (int i = 0; i < roomResult.length(); i++) {
-      JSONObject jo = roomResult.getJSONObject(i);
-
-      UserRoomInfo userRoomInfo = new UserRoomInfo();
-      userRoomInfo.setRoomId(jo.get("roomId").toString());
-      userRoomInfo.setLastMsg(jo.get("lastMsg").toString());
-      userRoomInfo.setLastMsgDt(jo.get("lastMsgDt").toString());
-      userRoomInfo.setMemberCount(jo.get("memberCount").toString());
-
-      userRoomList.add(userRoomInfo);
+    for (UserRoomInfo roomInfo : roomInfos) {
+      try {
+        JsonObject lastMsg = this.getLast("room:" + roomInfo.getRoomId() + ":messages");
+        if (ObjectUtil.isNotEmpty(lastMsg)) {
+          roomInfo.setLastMsg(lastMsg.get("message").getAsString());
+          roomInfo.setLastMsgDt(lastMsg.get("time").getAsString());
+        }
+      } catch (Exception e) {
+        continue;
+      }
     }
 
-    return userRoomList;
+    return roomInfos;
   }
 
   /**
    * redis set
    */
-  public void redisSet(final String key, final String value, final boolean isOverride) {
+  public void set(final String key, final String value, final boolean isOverride) {
     ValueOperations<String, String> vop = redisTemplate.opsForValue();
 
     if (isOverride) {
@@ -70,23 +65,38 @@ public class RedisService {
   /**
    * redis get value
    */
-  public String redisGetValue(final String key) {
+  public String getValue(final String key) {
     ValueOperations<String, String> vop = redisTemplate.opsForValue();
     String value = vop.get(key);
     return value;
   }
 
   /**
+   * redis get list
+   */
+  public List<String> getList(final String key) {
+    return redisTemplate.opsForList().range(key, 0, -1);
+  }
+
+  /**
+   * redis get list last data
+   */
+  public JsonObject getLast(final String key) {
+    List<String> values = redisTemplate.opsForList().range(key, -1, -1);
+    return (values != null && !values.isEmpty()) ? StringUtil.toJson(values.get(0)) : null;
+  }
+
+  /**
    * redis get hash value(JSONObject)
    */
-  public JSONObject redisGetJsonObject(final String key, final String group) {
+  public JSONObject getJson(final String key, final String group) {
     return (JSONObject) redisTemplate.opsForHash().get(key, group);
   }
 
   /**
    * redis get hash value(JSONOArray)
    */
-  public JSONArray redisGetJsonArray(final String key, final String group) {
+  public JSONArray getJsonArray(final String key, final String group) {
     Object obj = redisTemplate.opsForHash().get(key, group);
     return new JSONArray(obj.toString());
   }

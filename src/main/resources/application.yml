@@ -7,10 +7,6 @@ spring:
     fallback-to-system-locale: true
     mvc:
       throw-exception-if-no-handler-found: true
-  thymeleaf:
-    suffix: .html
-    cache: false
-
 
 server:
   port: 32000

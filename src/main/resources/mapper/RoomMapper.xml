@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.myapi.mymsgapi.dao.room.RoomDAO">
+
+  <select id="selectRoomList" parameterType="String" resultType="com.myapi.mymsgapi.model.UserRoomInfo">
+    /* 방목록 불러오기 */
+    SELECT
+      RI.ROOM_ID,
+      RI.ROOM_NAME,
+      (select count(1) from ROOM_MEMBER RM2 where RM2.ROOM_ID = RI.ROOM_ID) AS MEMBER_COUNT
+    FROM
+      ROOM_INFO AS RI
+        INNER JOIN
+      ROOM_MEMBER AS RM ON RI.ROOM_ID = RM.ROOM_ID
+    WHERE
+      RM.MEMBER_ID = #{userId}
+    ORDER BY
+      RI.ROOM_ID DESC
+  </select>
+
+</mapper>

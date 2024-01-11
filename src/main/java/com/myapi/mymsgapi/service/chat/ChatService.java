@@ -51,6 +51,7 @@ public class ChatService {
    * 채팅방 입장
    */
   public ChatUserJoinRes chatUserJoin(ChatUserJoinReq params) {
+
     // TODO : redis in 작성 필요
     return null;
   }

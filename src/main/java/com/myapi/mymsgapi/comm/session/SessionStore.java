@@ -22,6 +22,10 @@ public class SessionStore {
     getSession().setAttribute(sessionKeys.name(), object);
   }
 
+  public static void remove(final SessionKeys sessionKeys){
+    getSession().removeAttribute(sessionKeys.name());
+  }
+
   public static Object get(final SessionKeys sessionKeys) {
     return exists(sessionKeys) ? getSession().getAttribute(sessionKeys.name()) : null;
   }

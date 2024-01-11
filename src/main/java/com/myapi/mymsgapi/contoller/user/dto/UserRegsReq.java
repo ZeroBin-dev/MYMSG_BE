@@ -3,6 +3,7 @@ package com.myapi.mymsgapi.contoller.user.dto;
 import com.myapi.mymsgapi.contoller.comm.dto.BaseRequest;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.NotEmpty;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,6 +14,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
+@Builder
 public class UserRegsReq extends BaseRequest {
   @NotEmpty
   private String userId; // 사용자ID
@@ -25,4 +27,5 @@ public class UserRegsReq extends BaseRequest {
 
   @NotEmpty
   private String userName; // 사용자 이름
+
 }

@@ -22,7 +22,8 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
       if (SessionUtil.isLogin()) {
         return true;
       } else {
-        throw new YbBizException(ExceptType.LGIN001); // 로그인이 필요합니다.
+        response.sendRedirect(request.getContextPath() + "/user/login");
+        return false; // 더 이상 진행하지 않도록 false 반환
       }
     }
 

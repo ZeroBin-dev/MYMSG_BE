@@ -1,17 +1,33 @@
-<!doctype html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-  <title>Websocket Chat</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-</head>
-<body>
-<div class="container">
-  <h1> 메인 페이지 </h1>
-  <button></button>
-</div>
-<script>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
 
-</script>
-</body>
+<head>
+  <link th:href="@{/css/main.css}" rel="stylesheet"/>
+</head>
+
+<th:block layout:fragment="content">
+  <!-- Begin Page Content -->
+  <div id="welcome">
+    <div class="welcome-message">
+      <h1><span th:text="${userVo.lginData.userName}"></span> 환영합니다!</h1>
+      <p>채팅방을 선택하여 대화를 시작하세요.</p>
+    </div>
+  </div>
+
+  <div id="room" style="display: none">
+    <h1></h1>
+
+  </div>
+
+  <script>
+    function enterRoom(roomId){
+
+
+
+      alert(roomId);
+    }
+  </script>
+</th:block>
 </html>
