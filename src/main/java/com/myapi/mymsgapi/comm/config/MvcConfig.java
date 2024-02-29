@@ -23,6 +23,9 @@ public class MvcConfig implements WebMvcConfigurer {
     registry.addResourceHandler("/**", "/resources/**")
       .addResourceLocations("classpath:/templates/", "classpath:/static/")
       .setCacheControl(CacheControl.maxAge(10, TimeUnit.MINUTES));
+
+    registry.addResourceHandler("/img/**")
+      .addResourceLocations("file:///Y:/zeroBin/");
   }
 
   @Override

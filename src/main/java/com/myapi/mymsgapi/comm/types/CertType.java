@@ -20,6 +20,7 @@ public enum CertType {
     }
 
     for (CertType certType : values()) {
+
       if (str.equals(certType.value)) {
         return certType;
       }
