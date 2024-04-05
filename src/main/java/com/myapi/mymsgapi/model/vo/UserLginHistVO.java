@@ -1,4 +1,4 @@
-package com.myapi.mymsgapi.model;
+package com.myapi.mymsgapi.model.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

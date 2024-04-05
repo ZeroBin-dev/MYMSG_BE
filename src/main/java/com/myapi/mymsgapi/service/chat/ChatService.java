@@ -1,8 +1,13 @@
 package com.myapi.mymsgapi.service.chat;
 
+import com.myapi.mymsgapi.comm.utils.CryptoUtil;
 import com.myapi.mymsgapi.contoller.chat.dto.ChatUserJoinReq;
 import com.myapi.mymsgapi.contoller.chat.dto.ChatUserJoinRes;
+import com.myapi.mymsgapi.dao.room.RoomDAO;
+import com.myapi.mymsgapi.model.ChatMessage;
 import com.myapi.mymsgapi.model.ChatRoom;
+import com.myapi.mymsgapi.model.RoomInfo;
+import com.myapi.mymsgapi.model.vo.RoomVO;
 import com.myapi.mymsgapi.service.redis.RedisService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +22,7 @@ import java.util.*;
 public class ChatService {
 
   private final RedisService _redisService;
+  private final RoomDAO _rommDao;
 
   private Map<String, ChatRoom> chatRooms;
 
@@ -25,6 +31,21 @@ public class ChatService {
   private void init() {
     chatRooms = new LinkedHashMap<>();
   }
+
+  /**
+   * 대화내용 불러오기
+   */
+  public RoomVO getChatMessages(final String roomId){
+    RoomVO roomVO = new RoomVO();
+    // 방기본정보 가져오기
+    roomVO.setRoomInfo(_rommDao.selectRoomInfo(roomId));
+    // 방유저목록 가져오기
+    roomVO.setRoomMembers(_rommDao.selectMemberInfo(roomId));
+    // 메시지 목록 가져오기
+    roomVO.setMessageList(_redisService.getRoomMessageList(roomId));
+    return roomVO;
+  }
+
 
   //채팅방 불러오기
   public List<ChatRoom> findAllRoom() {

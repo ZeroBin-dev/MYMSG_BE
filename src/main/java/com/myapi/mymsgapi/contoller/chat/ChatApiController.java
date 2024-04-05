@@ -19,14 +19,5 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ChatApiController {
 
-  private final ChatService _chatService;
-
-  @ResponseBody
-  @LoginCheck(required = true)
-  @PostMapping(value = "/chat/list")
-  @Operation(summary = "채팅방 입장", description = "사용자 채팅방 입장")
-  public ChatUserJoinRes chatUserJoin(@RequestBody @Validated ChatUserJoinReq params) {
-    return _chatService.chatUserJoin(params);
-  }
 
 }

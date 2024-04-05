@@ -1,5 +1,7 @@
-package com.myapi.mymsgapi.model;
+package com.myapi.mymsgapi.model.vo;
 
+import com.myapi.mymsgapi.model.UserLginInfo;
+import com.myapi.mymsgapi.model.UserRoomInfo;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

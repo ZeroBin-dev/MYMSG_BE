@@ -30,7 +30,7 @@
     WHERE USER_ID = #{userId}
   </update>
 
-  <insert id="insertLoginUserHist" parameterType="com.myapi.mymsgapi.model.UserLginHistVO">
+  <insert id="insertLoginUserHist" parameterType="com.myapi.mymsgapi.model.vo.UserLginHistVO">
     /* 로그인 이력 쌓기 */
     INSERT INTO USER_LOGIN_HISTORY(
     USER_ID

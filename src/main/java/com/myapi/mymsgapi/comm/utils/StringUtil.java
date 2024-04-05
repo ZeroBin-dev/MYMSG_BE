@@ -35,12 +35,4 @@ public class StringUtil {
     // 모든 value 값이 n 이하인지 확인
     return countMap.values().stream().allMatch(value -> value <= limit);
   }
-
-  public static JsonObject toJson(final String p) {
-    JsonParser jsonParser = new JsonParser();
-    Object obj = jsonParser.parse(p);
-    JsonObject jo = (JsonObject) obj;
-    return jo;
-  }
-
 }

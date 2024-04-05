@@ -4,40 +4,42 @@ import com.google.gson.JsonObject;
 import com.myapi.mymsgapi.comm.utils.ObjectUtil;
 import com.myapi.mymsgapi.comm.utils.StringUtil;
 import com.myapi.mymsgapi.dao.room.RoomDAO;
+import com.myapi.mymsgapi.model.ChatMessage;
 import com.myapi.mymsgapi.model.UserRoomInfo;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class RedisService {
 
-  private final RoomDAO roomDAO;
+  private final RoomDAO _roomDAO;
 
-  private final RedisTemplate<String, String> redisTemplate;
+  private final RedisTemplate<String, String> _redisTemplate;
 
   /**
    * 유저별 채팅방 정보 가져오기
    */
   public List<UserRoomInfo> getUserRoomList(final String userId) {
     // userId 로 현재 참여중인 방번호 찾기
-    List<UserRoomInfo> roomInfos = roomDAO.selectRoomList(userId);
+    List<UserRoomInfo> roomInfos = _roomDAO.selectRoomList(userId);
 
     for (UserRoomInfo roomInfo : roomInfos) {
       try {
-        JsonObject lastMsg = this.getLast("room:" + roomInfo.getRoomId() + ":messages");
+        JsonObject lastMsg = this.__getLast("room:" + roomInfo.getRoomId() + ":messages");
         if (ObjectUtil.isNotEmpty(lastMsg)) {
           roomInfo.setLastMsg(lastMsg.get("message").getAsString());
           roomInfo.setLastMsgDt(lastMsg.get("time").getAsString());
         }
       } catch (Exception e) {
-        continue;
       }
     }
 
@@ -45,10 +47,40 @@ public class RedisService {
   }
 
   /**
+   * 방번호별 대화내용 가져오기
+   */
+  public List<ChatMessage> getRoomMessageList(final String roomId) {
+    ArrayList<ChatMessage> chatMessages = new ArrayList<>();
+
+    List<String> messages = __getList("room:"+roomId+":messages");
+    for(String message : messages){
+      chatMessages.add(ObjectUtil.jsonToObject(message, ChatMessage.class));
+    }
+
+    return chatMessages;
+  }
+
+  /**
+   * 대화내용 저장하기
+   */
+  public boolean saveMessage(String roomId, String jsonString){
+    try {
+      this.__appendToList(roomId, jsonString);
+      return true;
+    } catch (Exception e){
+      return false;
+    }
+  }
+
+
+  /*******************************************************************************************************************/
+  /*******************************************************************************************************************/
+
+  /**
    * redis set
    */
-  public void set(final String key, final String value, final boolean isOverride) {
-    ValueOperations<String, String> vop = redisTemplate.opsForValue();
+  private void __set(final String key, final String value, final boolean isOverride) {
+    ValueOperations<String, String> vop = _redisTemplate.opsForValue();
 
     if (isOverride) {
       vop.set(key, value);
@@ -63,10 +95,19 @@ public class RedisService {
   }
 
   /**
+   * redis list append
+   */
+  private void __appendToList(final String roomId, final String message) {
+    String listKey = "room:" + roomId + ":messages";
+    ListOperations<String, String> lop = _redisTemplate.opsForList();
+    lop.rightPush(listKey, message);
+  }
+
+  /**
    * redis get value
    */
-  public String getValue(final String key) {
-    ValueOperations<String, String> vop = redisTemplate.opsForValue();
+  private String __getValue(final String key) {
+    ValueOperations<String, String> vop = _redisTemplate.opsForValue();
     String value = vop.get(key);
     return value;
   }
@@ -74,30 +115,30 @@ public class RedisService {
   /**
    * redis get list
    */
-  public List<String> getList(final String key) {
-    return redisTemplate.opsForList().range(key, 0, -1);
+  private List<String> __getList(final String key) {
+    return _redisTemplate.opsForList().range(key, 0, -1);
   }
 
   /**
    * redis get list last data
    */
-  public JsonObject getLast(final String key) {
-    List<String> values = redisTemplate.opsForList().range(key, -1, -1);
-    return (values != null && !values.isEmpty()) ? StringUtil.toJson(values.get(0)) : null;
+  private JsonObject __getLast(final String key) {
+    List<String> values = _redisTemplate.opsForList().range(key, -1, -1);
+    return (values != null && !values.isEmpty()) ? ObjectUtil.toJson(values.get(0)) : null;
   }
 
   /**
    * redis get hash value(JSONObject)
    */
-  public JSONObject getJson(final String key, final String group) {
-    return (JSONObject) redisTemplate.opsForHash().get(key, group);
+  private JSONObject __getJson(final String key, final String group) {
+    return (JSONObject) _redisTemplate.opsForHash().get(key, group);
   }
 
   /**
    * redis get hash value(JSONOArray)
    */
-  public JSONArray getJsonArray(final String key, final String group) {
-    Object obj = redisTemplate.opsForHash().get(key, group);
+  private JSONArray __getJsonArray(final String key, final String group) {
+    Object obj = _redisTemplate.opsForHash().get(key, group);
     return new JSONArray(obj.toString());
   }
 }

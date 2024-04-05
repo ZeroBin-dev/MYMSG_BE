@@ -1,6 +1,6 @@
 package com.myapi.mymsgapi.comm.session;
 
-import com.myapi.mymsgapi.model.UserVO;
+import com.myapi.mymsgapi.model.vo.UserVO;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor

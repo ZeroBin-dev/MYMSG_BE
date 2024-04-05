@@ -2,7 +2,7 @@ package com.myapi.mymsgapi.dao.user;
 
 import com.myapi.mymsgapi.contoller.user.dto.UserLginReq;
 import com.myapi.mymsgapi.contoller.user.dto.UserRegsReq;
-import com.myapi.mymsgapi.model.UserLginHistVO;
+import com.myapi.mymsgapi.model.vo.UserLginHistVO;
 import com.myapi.mymsgapi.model.UserLginInfo;
 import org.apache.ibatis.annotations.Mapper;
 

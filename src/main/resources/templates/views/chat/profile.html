@@ -1,37 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link th:href="@{/css/styles.css}" rel="stylesheet"/>
-  <title>Profile</title>
-</head>
+<th:block th:replace="/layout/fragments/head.html :: headFragment" />
 <body>
   <header class="top-header top-header--transparent">
-    <div class="header__top">
-      <div class="header__column">
-        <!-- plane icon -->
-        <i class="fa fa-plane"></i>
-
-        <!-- wifi icon -->
-        <i class="fa fa-wifi"></i>
-
-      </div>
-      <div class="header__column">
-        <span class="header__time">18:38</span>
-      </div>
-      <div class="header__column">
-        <!-- moon icon -->
-        <i class="fa fa-moon-o"></i>
-
-        <!-- blue icon -->
-        <i class="fa fa-bluetooth-b"></i>
-
-        <span class="header__battery">66% <!-- battery icon --><i class="fa fa-battery-full"></i></span>
-      </div>
-    </div>
+    <th:block th:replace="/layout/fragments/header_top.html :: headerTopFragment" />
     <div class="header__bottom">
       <div class="header__column">
         <a href="index">

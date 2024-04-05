@@ -30,7 +30,7 @@ public class CryptoUtil {
   /**
    * AES256 복호화
    */
-  public String decrypt(String cipherText) throws Exception {
+  public static String decrypt(String cipherText) {
     try {
       Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
       SecretKeySpec keySpec = new SecretKeySpec(key.getBytes(), "AES");

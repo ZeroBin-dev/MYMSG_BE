@@ -3,28 +3,24 @@
 
 <!-- Footer -->
 <th:block th:fragment="footerFragment">
-  <footer class="footer">
-    <div class="contact-info">
-      <p>Email: zero-bin@naver.com</p>
-      <p>Phone: 010-2015-7631</p>
-    </div>
-
-    <div class="social-links">
-      <a href="#" target="_blank">Twitter</a>
-      <a href="#" target="_blank">Facebook</a>
-      <a href="#" target="_blank">LinkedIn</a>
-    </div>
-
-    <div class="site-links">
-      <a href="#">About Us</a>
-      <a href="#">Our Services</a>
-      <a href="#">Contact Us</a>
-    </div>
-
-    <div class="copyright">
-      <p>© 2023 CYB Compony. All rights reserved.</p>
-    </div>
-  </footer>
+  <nav class="tab-bar">
+    <a href="/index" id="tab1" class="tab-bar__tab tab-bar__tab--selected">
+      <i class="fa fa-user"></i>
+      <span class="tab-bar__title">내친구</span>
+    </a>
+    <a href="/chats" id="tab2" class="tab-bar__tab">
+      <i class="fa fa-comment"></i>
+      <span class="tab-bar__title">채팅방</span>
+    </a>
+    <a href="/find" id="tab3" class="tab-bar__tab">
+      <i class="fa fa-search"></i>
+      <span class="tab-bar__title">찾기</span>
+    </a>
+    <a href="/more" id="tab4" class="tab-bar__tab">
+      <i class="fa fa-ellipsis-h"></i>
+      <span class="tab-bar__title">더보기</span>
+    </a>
+  </nav>
 </th:block>
 
 </html>

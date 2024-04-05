@@ -9,15 +9,38 @@
     SELECT
       RI.ROOM_ID,
       RI.ROOM_NAME,
-      (select count(1) from ROOM_MEMBER RM2 where RM2.ROOM_ID = RI.ROOM_ID) AS MEMBER_COUNT
+      COUNT(RM.MEMBER_ID) AS MEMBER_COUNT,
+      GROUP_CONCAT(
+            IF(RM.MEMBER_ID != #{userId}, UM.PROFILE_PATH, NULL)
+            SEPARATOR ','
+      ) AS PROFILES
     FROM
-      ROOM_INFO AS RI
-        INNER JOIN
-      ROOM_MEMBER AS RM ON RI.ROOM_ID = RM.ROOM_ID
+      ROOM_INFO RI JOIN
+      ROOM_MEMBER RM ON RI.ROOM_ID = RM.ROOM_ID JOIN
+      USER_MASTER UM ON RM.MEMBER_ID = UM.USER_ID
     WHERE
-      RM.MEMBER_ID = #{userId}
+        RI.ROOM_ID IN (
+          SELECT RM2.ROOM_ID
+          FROM ROOM_MEMBER RM2
+          WHERE RM2.MEMBER_ID = #{userId}
+        )
+    GROUP BY
+      RI.ROOM_ID,
+      RI.ROOM_NAME
     ORDER BY
       RI.ROOM_ID DESC
   </select>
 
+  <select id="selectRoomInfo" parameterType="String" resultType="com.myapi.mymsgapi.model.RoomInfo">
+    SELECT ROOM_ID, ROOM_NAME
+    FROM ROOM_INFO
+    WHERE ROOM_ID = #{roomId}
+  </select>
+
+  <select id="selectMemberInfo" parameterType="String" resultType="com.myapi.mymsgapi.model.MemberInfo">
+    SELECT UM.USER_ID , UM.USER_NAME , UM.PROFILE_PATH , UM.STAT_MSG
+    FROM USER_MASTER UM  INNER JOIN ROOM_MEMBER RM
+        ON UM.USER_ID = RM.MEMBER_ID
+    WHERE RM.ROOM_ID = #{roomId}
+  </select>
 </mapper>

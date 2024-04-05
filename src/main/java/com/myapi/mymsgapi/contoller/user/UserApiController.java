@@ -3,7 +3,7 @@ package com.myapi.mymsgapi.contoller.user;
 import com.myapi.mymsgapi.contoller.comm.dto.BaseUpdateResponse;
 import com.myapi.mymsgapi.contoller.user.dto.UserLginReq;
 import com.myapi.mymsgapi.contoller.user.dto.UserRegsReq;
-import com.myapi.mymsgapi.model.UserVO;
+import com.myapi.mymsgapi.model.vo.UserVO;
 import com.myapi.mymsgapi.service.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;

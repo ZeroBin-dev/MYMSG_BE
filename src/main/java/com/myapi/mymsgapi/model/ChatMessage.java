@@ -10,15 +10,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ChatMessage {
-  public enum MessageType {
-    ENTER, TALK
-  }
-
-  private MessageType type;
-  //채팅방 ID
-  private String roomId;
-  //보내는 사람
-  private String sender;
-  //내용
-  private String message;
+  private String messageId; // roomId+"_"+ms 3자리
+  private String userId; // 사용자ID
+  private String userName; // 사용자명
+  private String message; // 메세지
+  private String time; // 전송시간
 }

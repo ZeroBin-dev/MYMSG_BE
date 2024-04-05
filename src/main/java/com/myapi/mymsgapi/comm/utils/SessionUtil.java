@@ -2,7 +2,7 @@ package com.myapi.mymsgapi.comm.utils;
 
 import com.myapi.mymsgapi.comm.session.SessionKeys;
 import com.myapi.mymsgapi.comm.session.SessionStore;
-import com.myapi.mymsgapi.model.UserVO;
+import com.myapi.mymsgapi.model.vo.UserVO;
 
 public class SessionUtil {
 

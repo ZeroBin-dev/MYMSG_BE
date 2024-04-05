@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="/layout/fragments/head.html :: headFragment"/>
+<body class="body-chat">
+<header class="top-header chat-header">
+  <th:block th:replace="/layout/fragments/header_top.html :: headerTopFragment"/>
+
+  <div class="header__bottom">
+    <div class="header__column">
+      <a href="/chats">
+        <i class="fa fa-chevron-left fa-lg"></i>
+      </a>
+    </div>
+    <div class="header__column">
+      <span class="header__text" th:text="${roomVO.roomInfo.roomName}+' ['+${roomVO.roomMembers.size()}+']'"></span>
+    </div>
+    <div class="header__column">
+      <i class="fa fa-search"></i>
+      <i class="fa fa-bars"></i>
+    </div>
+  </div>
+</header>
+
+<main class="chat" id="chatList">
+
+  <div class="date-divider">
+    <span class="date-divider__text">Wednesday, August 2, 2017</span>
+  </div>
+
+  <th:block th:each="message : ${roomVO.messageList}">
+    <!-- 내가 보낸 메세지 -->
+    <div class="chat__message chat__message-from-me"
+         th:if="${message != null and userVO.lginData.userId eq message.userId}">
+      <span class="chat__message-time" th:text="${message.time}"></span>
+      <span class="chat__message-body" th:text="${message.message}"></span>
+    </div>
+
+    <!-- 내가 받은 메세지 -->
+    <div class="chat__message chat__message-to-me"
+         th:unless="${message != null and userVO.lginData.userId eq message.userId}">
+      <img th:src="@{'/profile/' + ${message.userId} + '.png'}" alt="" class="chat-message-avatar" onerror="this.src='/images/avatar.png'">
+      <div class="chat__message-center">
+        <h3 class="chat__message-username" th:text="${message.userName}"></h3>
+        <span class="chat__message-body" th:text="${message.message}"></span>
+      </div>
+      <span class="chat__message-time" th:text="${message.time}"></span>
+    </div>
+  </th:block>
+
+</main>
+
+<div class="type-message">
+  <i class="fa fa-plus fa-lg"></i>
+  <div class="type-message__input">
+    <input type="text" id="messageInput" onkeypress="handleKeyPress(event)">
+    <i class="fa fa-smile-o fa-lg"></i>
+    <span class="record-message">
+      <i class="fa fa-microphone fa-lg"></i>
+    </span>
+  </div>
+</div>
+<div class="bigScreenText">
+  Please make your screen smaller
+</div>
+<script th:inline="javascript">
+
+  var userId = [[${userVO.lginData.userId}]];
+  var userName = [[${userVO.lginData.userName}]];
+  var roomId = [[${roomVO.roomInfo.roomId}]];
+  const ws = new WebSocket("ws://192.168.202.13:32000/ws/chatting/"+roomId);
+
+  function handleKeyPress(event) {
+    if (event.key === 'Enter') {
+      var message = document.getElementById('messageInput').value;
+      sendMessage(message);
+      document.getElementById('messageInput').value = ''; // 메시지를 보내고 입력란 비우기
+    }
+  }
+
+  ws.onopen = function () {
+    console.log("ws.onopen");
+  };
+
+  ws.onmessage = function (event) {
+    var message = event.data;
+    console.log("받은메세지 : " + message);
+    var data = JSON.parse(message);
+    var str = '';
+    if (data.userId == userId) {
+      // 내가 보낸 메세지
+      str += '<div class="chat__message chat__message-from-me">';
+      str += '  <span class="chat__message-time">' + data.time + '</span>';
+      str += '  <span class="chat__message-body">' + data.message + '</span>';
+      str += '</div>';
+    } else {
+      // 상대가 보낸 메세지
+      str += ' <div class="chat__message chat__message-to-me">';
+      str += '<img src="/profile/' + data.userId + '.png" alt="" class="chat-message-avatar" onerror="this.src=\'/images/avatar.png\'">';
+      str += '    <div class="chat__message-center">';
+      str += '     <h3 class="chat__message-username">' + data.userName + '</h3>';
+      str += '      <span class="chat__message-body">' + data.message + '</span>';
+      str += '   </div>';
+      str += '    <span class="chat__message-time">' + data.time + '</span>';
+      str += ' </div>';
+    }
+    $("#chatList").append(str);
+  };
+
+  ws.onclose = function () {
+    console.log("ws.onclose");
+  };
+
+  ws.onerror = function (error) {
+    console.log("ws.onerror");
+  };
+
+  // 메시지를 보내는 함수
+  function sendMessage(message) {
+    if (ws.readyState === WebSocket.OPEN) {
+      var currentTime = getCurrentTime();
+      var messageId = userId+"_"+roomId+"_"+currentTime;
+      var data = {
+        messageId: messageId,
+        message: message,
+        userId: userId,
+        userName: userName,
+        time: currentTime
+      };
+
+      ws.send(JSON.stringify(data));
+      console.log('메시지를 보냈습니다:', data);
+
+    } else if (ws.readyState === WebSocket.CONNECTING) {
+      console.log('WebSocket 연결이 아직 진행 중입니다.');
+    } else {
+      console.error('WebSocket 연결이 닫혀 있습니다.');
+    }
+  }
+
+  function getCurrentTime() {
+    var now = new Date();
+    var year = now.getFullYear();
+    var month = String(now.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 1을 더해줍니다.
+    var day = String(now.getDate()).padStart(2, '0');
+    var hours = String(now.getHours()).padStart(2, '0');
+    var minutes = String(now.getMinutes()).padStart(2, '0');
+    var seconds = String(now.getSeconds()).padStart(2, '0');
+
+    // YYYY-MM-DD HH:mm:ss
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  }
+
+</script>
+</body>
+</html>
