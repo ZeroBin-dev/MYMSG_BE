@@ -1,10 +1,13 @@
 package com.myapi.mymsgapi.dao.user;
 
-import com.myapi.mymsgapi.contoller.user.dto.UserLginReq;
-import com.myapi.mymsgapi.contoller.user.dto.UserRegsReq;
-import com.myapi.mymsgapi.model.vo.UserLginHistVO;
+import com.myapi.mymsgapi.contoller.user.dto.*;
+import com.myapi.mymsgapi.model.UserFriendInfo;
 import com.myapi.mymsgapi.model.UserLginInfo;
+import com.myapi.mymsgapi.model.UserProfileInfo;
+import com.myapi.mymsgapi.model.vo.UserLginHistVO;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 @Mapper
 public interface UserDAO {
@@ -38,4 +41,14 @@ public interface UserDAO {
    * 아이디 중복 체크
    */
   int dupChkUserId(final String userId);
+
+  List<UserFriendInfo> selectFriendList(final String userId);
+
+  UserProfileInfo selectUserProfile(final String userId);
+
+  int selectFindFriend(final AddFriendReq params);
+
+  void insertFriend(final AddFriendReq params);
+
+  FindFriendRes selectFindFriendId(final FindFriendReq params);
 }

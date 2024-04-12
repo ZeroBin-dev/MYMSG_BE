@@ -23,6 +23,7 @@ public class ErrorCommController implements ErrorController {
 
     model.addAttribute("code", status.toString());
     model.addAttribute("msg", HttpStatus.valueOf(Integer.valueOf(status.toString())));
+
     return "error/error";
   }
 

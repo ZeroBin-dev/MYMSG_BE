@@ -12,6 +12,7 @@
     ,USER_NAME
     ,PW_ERR_CNT
     ,PROFILE_PATH
+    ,IFNULL(STAT_MSG, '') AS STAT_MSG
     FROM USER_MASTER
     WHERE 1=1
     AND USER_ID = #{userId}
@@ -69,6 +70,58 @@
     FROM USER_MASTER
     WHERE 1=1
     AND USER_ID = #{userId}
+  </select>
+
+  <select id="selectFriendList" parameterType="String" resultType="com.myapi.mymsgapi.model.UserFriendInfo">
+    SELECT UF.USER_ID
+         , UF.FRIEND_ID
+         , UM.USER_NAME  AS FRIEND_NAME
+         , IFNULL(UM.STAT_MSG, '') AS FRIEND_STAT_MSG
+         , UF.BOOKMARK_YN
+         , DATE_FORMAT(UF.REG_DT, '%Y-%m-%d %H:%i:%s') AS REG_DT
+    FROM USER_FRIEND AS UF
+           INNER JOIN USER_MASTER AS UM
+                      ON (UF.FRIEND_ID = UM.USER_ID)
+    WHERE UF.USER_ID = #{userId}
+  </select>
+
+  <select id="selectUserProfile" parameterType="String" resultType="com.myapi.mymsgapi.model.UserProfileInfo">
+    SELECT USER_ID
+         , USER_NAME
+         , DATE_FORMAT(REG_DT, '%Y-%m-%d %H:%i:%s') AS REG_DT
+         , DATE_FORMAT(MOD_DT, '%Y-%m-%d %H:%i:%s') AS MOD_DT
+         , PROFILE_PATH
+         , IFNULL(STAT_MSG, '') AS STAT_MSG
+    FROM USER_MASTER
+    WHERE USER_ID = #{userId}
+  </select>
+
+  <select id="selectFindFriend" parameterType="com.myapi.mymsgapi.contoller.user.dto.AddFriendReq" resultType="Integer">
+    SELECT COUNT(*)
+    FROM USER_FRIEND
+    WHERE USER_ID = #{userId} AND FRIEND_ID = #{friendId}
+  </select>
+
+  <insert id="insertFriend" parameterType="com.myapi.mymsgapi.contoller.user.dto.AddFriendReq">
+    INSERT INTO USER_FRIEND(
+    USER_ID
+    ,FRIEND_ID
+    ,BOOKMARK_YN
+    ,REG_DT
+    ) VALUES (
+    #{userId}
+    ,#{friendId}
+    ,'N'
+    ,now()
+    )
+  </insert>
+
+  <select id="selectFindFriendId" parameterType="com.myapi.mymsgapi.contoller.user.dto.FindFriendReq" resultType="com.myapi.mymsgapi.contoller.user.dto.FindFriendRes">
+    SELECT
+    'Y' AS EXIST_YN
+    ,USER_ID
+    FROM USER_MASTER
+    WHERE USER_ID = #{userId}
   </select>
 
 </mapper>

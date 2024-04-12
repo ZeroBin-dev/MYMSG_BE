@@ -1,18 +1,20 @@
 package com.myapi.mymsgapi.service.user;
 
 import com.myapi.mymsgapi.comm.exception.YbBizException;
+import com.myapi.mymsgapi.comm.session.SessionKeys;
+import com.myapi.mymsgapi.comm.session.SessionStore;
 import com.myapi.mymsgapi.comm.types.ExceptType;
 import com.myapi.mymsgapi.comm.utils.CryptoUtil;
 import com.myapi.mymsgapi.comm.utils.HttpRequestUtil;
 import com.myapi.mymsgapi.comm.utils.ObjectUtil;
 import com.myapi.mymsgapi.comm.utils.SessionUtil;
+import com.myapi.mymsgapi.contoller.user.dto.*;
 import com.myapi.mymsgapi.contoller.comm.dto.BaseUpdateResponse;
-import com.myapi.mymsgapi.contoller.user.dto.UserLginReq;
-import com.myapi.mymsgapi.contoller.user.dto.UserRegsReq;
 import com.myapi.mymsgapi.dao.user.UserDAO;
-import com.myapi.mymsgapi.model.vo.UserLginHistVO;
+import com.myapi.mymsgapi.model.UserFriendInfo;
 import com.myapi.mymsgapi.model.UserLginInfo;
 import com.myapi.mymsgapi.model.UserRoomInfo;
+import com.myapi.mymsgapi.model.vo.UserLginHistVO;
 import com.myapi.mymsgapi.model.vo.UserVO;
 import com.myapi.mymsgapi.service.redis.RedisService;
 import lombok.RequiredArgsConstructor;
@@ -56,20 +58,37 @@ public class UserService {
         _userDAO.updateErrorCountZero(params);
 
         UserVO userVO = new UserVO();
-        userVO.setLginYn("Y");
 
         // 사용자 정보 가져오기
-        userVO.setLginData(loginResult);
+        this.__setLoginResult(userVO, loginResult);
 
         // room 정보 가져오기
-        List<UserRoomInfo> userRoomInfo = _redisService.getUserRoomList(userId);
-        userVO.setRoomList(userRoomInfo);
+        this.__setRoomList(userVO, userId);
 
-        SessionUtil.setUserVO(userVO);
+        // 친구목록 가져오기
+        this.__setFriendList(userVO, userId);
       }
     }
 
     return SessionUtil.getUserVO();
+  }
+
+  private void __setLoginResult(UserVO userVO, UserLginInfo loginResult){
+    userVO.setLginYn("Y");
+    userVO.setLginData(loginResult);
+    SessionUtil.setUserVO(userVO);
+  }
+
+  private void __setRoomList(UserVO userVO, String userId){
+    List<UserRoomInfo> userRoomInfo = _redisService.getUserRoomList(userId);
+    userVO.setRoomList(userRoomInfo);
+    SessionUtil.setUserVO(userVO);
+  }
+
+  private void __setFriendList(UserVO userVO, String userId){
+    List<UserFriendInfo> userFriendInfo = _userDAO.selectFriendList(userId);
+    userVO.setFriendList(userFriendInfo);
+    SessionUtil.setUserVO(userVO);
   }
 
   /**
@@ -109,5 +128,41 @@ public class UserService {
    */
   private boolean __idDupChk(final String id) {
     return _userDAO.dupChkUserId(id) > 0;
+  }
+
+  /**
+   * 친구추가
+   */
+  public BaseUpdateResponse addFriend(final AddFriendReq params) {
+    BaseUpdateResponse res = new BaseUpdateResponse();
+    int count = _userDAO.selectFindFriend(params);
+    if(count > 0){
+      res.setSuccYn("N");
+      res.setMsg("해당 유저는 이미 친구입니다.");
+      return res;
+    }
+
+    // 나와 친구 정보를 입력
+    _userDAO.insertFriend(params);
+
+    // 유저세션 수정
+    UserVO userVO = SessionStore.getAs(SessionKeys.USER_VO, UserVO.class);
+    this.__setFriendList(userVO, params.getUserId());
+
+    // 친구정보에도 나를 입력
+    AddFriendReq addFriendReq = new AddFriendReq();
+    addFriendReq.setUserId(params.getFriendId());
+    addFriendReq.setFriendId(params.getUserId());
+    _userDAO.insertFriend(addFriendReq);
+
+    res.setSuccYn("Y");
+    return res;
+  }
+
+  /**
+   * 친구찾기
+   */
+  public FindFriendRes findFriend(final FindFriendReq params) {
+    return _userDAO.selectFindFriendId(params);
   }
 }

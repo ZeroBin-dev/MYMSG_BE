@@ -1,12 +1,11 @@
 package com.myapi.mymsgapi.model.vo;
 
-import com.myapi.mymsgapi.model.*;
+import com.myapi.mymsgapi.model.ChatMessage;
+import com.myapi.mymsgapi.model.MemberInfo;
+import com.myapi.mymsgapi.model.RoomInfo;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.io.Serial;
-import java.io.Serializable;
 import java.util.List;
 
 @Getter

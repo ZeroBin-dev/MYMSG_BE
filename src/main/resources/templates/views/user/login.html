@@ -1,17 +1,53 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="layout/fragments/head.html :: headFragment"/>
+<body class="body-chat">
+<header class="top-header chat-header">
+  <th:block th:replace="layout/fragments/header_top.html :: headerTopFragment"/>
+  <div class="header__bottom">
+    <div class="header__column">
+      <span class="header__text"></span>
+    </div>
+    <div class="header__column">
+      <span class="header__text" id="loginHeader">로그인</span>
+    </div>
+    <div class="header__column">
+<!--      <i class="fa fa-cog"></i>-->
+    </div>
+  </div>
+</header>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link th:href="@{/css/styles.css}" rel="stylesheet"/>
-  <title>Login</title>
-</head>
+<!-- 로그인 -->
+<div class="login-body" id="login">
+  <header class="welcome-header">
+    <h1 class="welcome-header__title">Welcome to 깨톡</h1>
+    <p class="welcome-header__text"> 깨톡 계정이 있으신가요?<br /> 아이디로 로그인해주세요. </p>
+  </header>
 
-<th:block th:replace="/layout/fragments/script :: scriptFragment"></th:block>
+  <form id="loginForm" method="post">
+    <input id="loginId" type="text" required autocomplete="off" placeholder="아이디" />
+    <input id="loginPw" type="password" required autocomplete="off" placeholder="비밀번호" />
+    <input type="submit" value="Log in"/>
+    <a href="#" id="goSignup">회원가입</a>
+  </form>
+</div>
 
+<!-- 회원가입 -->
+<div class="join-body" id="signup" style="display: none">
+  <header class="welcome-header">
+    <h1 class="welcome-header__title">Welcome to 깨톡</h1>
+    <p class="welcome-header__text"> 깨톡이 처음이신가요? <br /> 정보를 입력해주세요. </p>
+  </header>
+
+  <form id="joinForm" method="post">
+    <input type="text" id="joinId" required autocomplete="off" placeholder="아이디"/>
+    <input type="text" id="joinName" required autocomplete="off" placeholder="이름"/>
+    <input type="password" id="joinPw" required autocomplete="off" placeholder="비밀번호"/>
+    <input type="password" id="joinPwChk" required autocomplete="off" placeholder="비밀번호 확인"/>
+    <input type="submit" value="Sign up"/>
+    <a href="#" id="goLogin">로그인</a>
+  </form>
+</div>
 <script th:inline="javascript">
   $(document).ready(function () {
 
@@ -26,13 +62,15 @@
         userPw: userPw
       }
       // API 호출
+      openModal();
       postApi('/user/loginProc', userData, onLoginSuccess, onLoginError);
     });
 
     // 로그인 성공 콜백함수
     function onLoginSuccess(data) {
+      closeModal();
+
       if (data.lginYn === 'Y') {
-        console.log("로그인성공")
         window.location.replace('/');
       } else {
         alert('Login failed!');
@@ -41,6 +79,8 @@
 
     // 로그인 실패 콜백함수
     function onLoginError(err) {
+      closeModal();
+
       var errCd = err.responseJSON?.exception?.errorCode;
       var errMsg = err.responseJSON?.exception?.errorMessage;
 
@@ -49,118 +89,59 @@
       }
 
       console.log("err >> " + JSON.stringify(err));
-      alert(err.responseJSON.exception.errorMessage);
+      alert(errMsg);
     }
 
-    $('.form').find('input, textarea').on('keyup blur focus', function (e) {
+    // 회원가입 버튼 클릭
+    $('#joinForm').submit(function (e) {
+      e.preventDefault();
+      var joinId = $('#joinId').val();
+      var joinName = $('#joinName').val();
+      var joinPw = $('#joinPw').val();
+      var joinPwChk = $('#joinPwChk').val();
 
-      var $this = $(this),
-        label = $this.prev('label');
-
-      if (e.type === 'keyup') {
-        if ($this.val() === '') {
-          label.removeClass('active highlight');
-        } else {
-          label.addClass('active highlight');
-        }
-      } else if (e.type === 'blur') {
-        if ($this.val() === '') {
-          label.removeClass('active highlight');
-        } else {
-          label.removeClass('highlight');
-        }
-      } else if (e.type === 'focus') {
-
-        if ($this.val() === '') {
-          label.removeClass('highlight');
-        } else if ($this.val() !== '') {
-          label.addClass('highlight');
-        }
+      var joinData = {
+        userId: joinId,
+        userPw: joinPw,
+        userPwChk: joinPwChk,
+        userName: joinName
       }
 
+      // API 호출
+      openModal();
+      postApi('/user/jnProc', joinData, onJoinSuccess, onJoinError);
     });
 
-    $('.tab a').on('click', function (e) {
+    // 회원가입 성공 콜백함수
+    function onJoinSuccess(data) {
+      closeModal();
+      alert('회원가입 완료!!')
+      window.location.replace('/user/login');
+    }
 
-      e.preventDefault();
+    // 회원가입 실패 콜백함수
+    function onJoinError(err) {
+      closeModal();
+      var errCd = err.responseJSON?.exception?.errorCode;
+      var errMsg = err.responseJSON?.exception?.errorMessage;
 
-      $(this).parent().addClass('active');
-      $(this).parent().siblings().removeClass('active');
+      console.log("err >> " + JSON.stringify(err));
+      alert(errMsg);
+    }
 
-      target = $(this).attr('href');
+    $('#goSignup').on('click', function () {
+      $('#login').hide();
+      $('#signup').fadeIn(600);
+      $('#loginHeader').text('회원가입');
+    });
 
-      $('.tab-content > div').not(target).hide();
-
-      $(target).fadeIn(600);
-
+    $('#goLogin').on('click', function () {
+      $('#login').fadeIn(600);
+      $('#signup').hide();
+      $('#loginHeader').text('로그인');
     });
 
   });
 </script>
-
-<div class="form">
-
-  <ul class="tab-group">
-    <li class="tab active"><a href="#login">로그인</a></li>
-    <li class="tab"><a href="#signup">회원가입</a></li>
-  </ul>
-
-  <!-- 회원가입 -->
-  <div class="tab-content">
-    <div id="login">
-      <h1>Welcome Back!</h1>
-      <form id="loginForm" method="post">
-        <div class="field-wrap">
-          <label>
-            Email Address<span class="req">*</span>
-          </label>
-          <input id="loginId" type="text" required autocomplete="off"/>
-        </div>
-        <div class="field-wrap">
-          <label>
-            Password<span class="req">*</span>
-          </label>
-          <input id="loginPw" type="password" required autocomplete="off"/>
-        </div>
-        <p class="forgot"><a href="#">Forgot Password?</a></p>
-        <button class="button button-block"/>
-        Log In</button>
-      </form>
-    </div>
-    <div id="signup">
-      <h1>Sign Up for Free</h1>
-      <form id="joinForm" method="post">
-        <div class="field-wrap">
-          <label>
-            아이디<span class="req">*</span>
-          </label>
-          <input type="text" id="joinId" required autocomplete="off"/>
-        </div>
-
-        <div class="field-wrap">
-          <label>
-            이름<span class="req">*</span>
-          </label>
-          <input type="text" id="joinName" required autocomplete="off"/>
-        </div>
-        <div class="top-row">
-          <div class="field-wrap">
-            <label>
-              비밀번호<span class="req">*</span>
-            </label>
-            <input type="password" id="joinPw" required autocomplete="off"/>
-          </div>
-          <div class="field-wrap">
-            <label>
-              비밀번호 확인<span class="req">*</span>
-            </label>
-            <input type="password" id="joinPwChk" required autocomplete="off"/>
-          </div>
-        </div>
-        <button type="submit" class="button button-block"/>
-        회원가입하기</button>
-      </form>
-    </div>
-  </div><!-- tab-content -->
-</div> <!-- /form -->
+</body>
 </html>

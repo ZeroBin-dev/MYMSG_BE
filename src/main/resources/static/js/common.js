@@ -21,5 +21,14 @@ function postApi(url, params, successCallback, errorCallback) {
       }
     }
   });
+}
 
+// 모달 열기
+function openModal() {
+  document.querySelector('.modal').style.display = 'block';
+}
+
+// 모달 닫기
+function closeModal() {
+  document.querySelector('.modal').style.display = 'none';
 }

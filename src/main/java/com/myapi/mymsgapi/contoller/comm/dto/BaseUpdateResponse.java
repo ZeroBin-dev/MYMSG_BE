@@ -9,4 +9,5 @@ import lombok.Setter;
 @NoArgsConstructor
 public class BaseUpdateResponse {
   private String succYn = "N";
+  private String msg = "";
 }

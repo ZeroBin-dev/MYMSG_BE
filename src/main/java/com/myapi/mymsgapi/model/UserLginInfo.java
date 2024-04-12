@@ -12,4 +12,5 @@ public class UserLginInfo {
   private String regDt;
   private String modDt;
   private String profilePath;
+  private String statMsg;
 }

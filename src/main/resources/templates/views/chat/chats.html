@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<th:block th:replace="/layout/fragments/head.html :: headFragment" />
+<th:block th:replace="layout/fragments/head.html :: headFragment" />
 <body>
   <header class="top-header">
-    <th:block th:replace="/layout/fragments/header_top.html :: headerTopFragment" />
+    <th:block th:replace="layout/fragments/header_top.html :: headerTopFragment" />
 
     <div class="header__bottom">
       <div class="header__column"></div>
@@ -36,12 +36,14 @@
       </div>
 
   </main>
-  <th:block th:replace="/layout/fragments/footer.html :: footerFragment" />
+  <th:block th:replace="layout/fragments/footer.html :: footerFragment" />
   <div class="bigScreenText">
     Please make your screen smaller
   </div>
   <script>
     window.onload = function() {
+      openModal();
+
       var tabs = document.querySelectorAll('.tab-bar__tab');
       tabs.forEach(function(tab) {
         tab.classList.remove('tab-bar__tab--selected');
@@ -49,6 +51,8 @@
           tab.classList.add('tab-bar__tab--selected');
         }
       });
+
+      closeModal();
     }
   </script>
 </body>

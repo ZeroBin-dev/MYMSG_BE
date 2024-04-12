@@ -22,7 +22,7 @@ public class SessionStore {
     getSession().setAttribute(sessionKeys.name(), object);
   }
 
-  public static void remove(final SessionKeys sessionKeys){
+  public static void remove(final SessionKeys sessionKeys) {
     getSession().removeAttribute(sessionKeys.name());
   }
 

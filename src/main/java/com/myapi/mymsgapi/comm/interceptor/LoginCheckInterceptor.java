@@ -1,8 +1,6 @@
 package com.myapi.mymsgapi.comm.interceptor;
 
 import com.myapi.mymsgapi.comm.annotation.LoginCheck;
-import com.myapi.mymsgapi.comm.exception.YbBizException;
-import com.myapi.mymsgapi.comm.types.ExceptType;
 import com.myapi.mymsgapi.comm.utils.SessionUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,7 +16,7 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
     HandlerMethod handlerMethod = (HandlerMethod) handler;
     LoginCheck loginCheck = handlerMethod.getMethodAnnotation(LoginCheck.class);
 
-    if(loginCheck != null && loginCheck.required()){
+    if (loginCheck != null && loginCheck.required()) {
       if (SessionUtil.isLogin()) {
         return true;
       } else {

@@ -1,10 +1,5 @@
 package com.myapi.mymsgapi.comm.utils;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.myapi.mymsgapi.comm.fundamental.YBMap;
-
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -27,10 +22,10 @@ public class StringUtil {
   public static boolean validDupStr(final String str, int limit) {
     // 값은값 grouping 후 count
     Map<Character, Long> countMap = str.chars()
-            .mapToObj(c -> (char) c)
-            .collect(Collectors.groupingBy(
-                    Function.identity(), Collectors.counting()
-            ));
+      .mapToObj(c -> (char) c)
+      .collect(Collectors.groupingBy(
+        Function.identity(), Collectors.counting()
+      ));
 
     // 모든 value 값이 n 이하인지 확인
     return countMap.values().stream().allMatch(value -> value <= limit);

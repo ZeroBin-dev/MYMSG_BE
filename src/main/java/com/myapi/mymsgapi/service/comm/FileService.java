@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class FileService {
 
-  @Value("${spring.file.base-path}")
+  //@Value("${spring.file.base-path}")
   private String fileBasePath; // 파일 기본 패스
 
   public String getFileContents() {

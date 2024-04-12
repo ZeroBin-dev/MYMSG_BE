@@ -43,9 +43,9 @@ public class LogAop {
 
   private String paramMapToString(Map<String, String[]> paramMap) {
     return paramMap.entrySet().stream()
-            .map(entry -> String.format("%s -> (%s)",
-                    entry.getKey(), Joiner.on(",").join(entry.getValue())))
-            .collect(Collectors.joining(", "));
+      .map(entry -> String.format("%s -> (%s)",
+        entry.getKey(), Joiner.on(",").join(entry.getValue())))
+      .collect(Collectors.joining(", "));
   }
 
   // Get request values
@@ -54,11 +54,11 @@ public class LogAop {
     String params = "없음";
 
     RequestAttributes requestAttributes = RequestContextHolder
-            .getRequestAttributes(); // 3
+      .getRequestAttributes(); // 3
 
     if (requestAttributes != null) {
       HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
-              .getRequestAttributes()).getRequest();
+        .getRequestAttributes()).getRequest();
 
       Map<String, String[]> paramMap = request.getParameterMap();
       if (!paramMap.isEmpty()) {

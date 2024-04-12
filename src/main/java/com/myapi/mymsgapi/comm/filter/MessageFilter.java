@@ -19,7 +19,7 @@ public class MessageFilter implements Filter {
 
   @Override
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-          throws IOException, ServletException {
+    throws IOException, ServletException {
 
     ContentCachingRequestWrapper requestWrapper = new ContentCachingRequestWrapper((HttpServletRequest) request);
     ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper((HttpServletResponse) response);
@@ -33,11 +33,11 @@ public class MessageFilter implements Filter {
 
     // TODO : 메세지 정의
     String status = node.path("status").asText();
-    if("error".equals(status)){
+    if ("error".equals(status)) {
 
     } else {
-      ((ObjectNode)node).put("status", "success");
-      ((ObjectNode)node).put("message", "성공");
+      ((ObjectNode) node).put("status", "success");
+      ((ObjectNode) node).put("message", "성공");
       //((ObjectNode)node).put("result", node);
     }
 
@@ -47,7 +47,7 @@ public class MessageFilter implements Filter {
     response.getOutputStream().write(newResponse.getBytes());
   }
 
-  private static Map<String, Object> setRequestMap(final ContentCachingRequestWrapper request){
+  private static Map<String, Object> setRequestMap(final ContentCachingRequestWrapper request) {
     Map<String, Object> requestMap = new HashMap<>();
     return requestMap;
   }

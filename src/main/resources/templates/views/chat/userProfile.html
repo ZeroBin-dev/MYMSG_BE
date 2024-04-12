@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="layout/fragments/head.html :: headFragment"/>
+<body>
+<header class="top-header top-header--transparent">
+  <th:block th:replace="layout/fragments/header_top.html :: headerTopFragment"/>
+  <div class="header__bottom">
+    <div class="header__column">
+      <a href="/index">
+        <i class="fa fa-times fa-lg"></i>
+      </a>
+    </div>
+    <div class="header__column">
+<!--      <i class="fa fa-star-o fa-lg"></i>-->
+    </div>
+  </div>
+</header>
+<main class="profile">
+  <header class="profile__header">
+    <div class="profile__header-container">
+      <img th:src="@{'/profile/' + ${profileInfo.userId} + '.png'}" alt="" onerror="this.src='/images/avatar.png'">
+      <h3 class="profile-header-title" th:text="${profileInfo.userName}"></h3>
+    </div>
+  </header>
+  <div class="profile__container">
+    <input type="text" id="roomName" placeholder="방이름">
+    <div class="profile__actions">
+      <!-- 본인 -->
+      <th:block th:if="${userVO.lginData.userId == profileInfo.userId}">
+        <div class="profile__action" id="changeProfile">
+          <span class="profile__action-circle">
+            <i class="fa fa-pencil fa-lg"></i>
+          </span>
+          <span class="profile__action-title">프로필 변경</span>
+        </div>
+      </th:block>
+
+      <!-- 타인 -->
+      <th:block th:unless="${userVO.lginData.userId == profileInfo.userId}">
+        <div class="profile__action" id="newChat">
+          <span class="profile__action-circle">
+            <i class="fa fa-comment fa-lg"></i>
+          </span>
+          <span class="profile__action-title">채팅+</span>
+        </div>
+        <div class="profile__action" id="addFriend">
+          <span class="profile__action-circle">
+            <i class="fa fa-user fa-lg"></i>
+          </span>
+          <span class="profile__action-title">친구추가</span>
+        </div>
+      </th:block>
+
+    </div>
+  </div>
+</main>
+<div class="bigScreenText">
+  Please make your screen smaller
+</div>
+
+<script th:inline="javascript">
+  $(document).ready(function () {
+    var userId = [[${userVO.lginData.userId}]];
+    var profileUserId = [[${profileInfo.userId}]];
+
+    // 채팅시작버튼 클릭
+    $('#newChat').on('click', (function () {
+      var userIdList = [userId, profileUserId];
+      var roomName = $('#roomName').val();
+
+      var data = {
+        userIdList: userIdList,
+        roomName: roomName
+      }
+      // API 호출
+      openModal();
+      postApi('/newChat', data, onNewChatSuccess, onNewChatError);
+    }));
+
+    function onNewChatSuccess(data) {
+      closeModal();
+      window.location.replace('/chat/' + data.roomId);
+    }
+
+    function onNewChatError(err) {
+      closeModal();
+      alert(err.responseJSON.exception.errorMessage);
+    }
+
+    // 친구추가버튼 클릭
+    $('#addFriend').on('click', (function () {
+      var data = {
+        userId: userId,
+        friendId: profileUserId
+      }
+      // API 호출
+      openModal();
+      postApi('/addFriend', data, onAddFriendSuccess, onAddFriendError);
+    }));
+
+    function onAddFriendSuccess(data) {
+      closeModal();
+      if(data.succYn !== 'Y'){
+        alert(data.msg);
+      } else {
+        alert('친구추가 요청이 완료되었습니다.')
+        window.location.replace('/index');
+      }
+    }
+
+    function onAddFriendError(err) {
+      closeModal();
+      alert(err.responseJSON.exception.errorMessage);
+    }
+
+  });
+</script>
+
+</body>
+</html>

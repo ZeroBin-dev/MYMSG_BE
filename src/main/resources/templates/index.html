@@ -1,73 +1,143 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<th:block th:replace="/layout/fragments/head.html :: headFragment" />
+<th:block th:replace="layout/fragments/head.html :: headFragment"/>
 <body>
-  <header class="top-header">
-    <th:block th:replace="/layout/fragments/header_top.html :: headerTopFragment" />
-    <div class="header__bottom">
-      <div class="header__column">
-        <span class="header__text">Manager</span>
-      </div>
-      <div class="header__column">
-        <span class="header__text">Friends</span>
-        <span class="header__number">1</span>
-      </div>
-      <div class="header__column">
-        <i class="fa fa-cog"></i>
-      </div>
+<header class="top-header">
+  <th:block th:replace="layout/fragments/header_top.html :: headerTopFragment"/>
+  <div class="header__bottom">
+    <div class="header__column">
+      <span class="header__text"></span>
     </div>
-  </header>
-  <main class="friends">
-    <div class="search-bar">
-      <i class="fa fa-search"></i>
-      <input type="text" placeholder="Find friends, chats, Plus Friends">
+    <div class="header__column">
+      <span class="header__text">친구목록</span>
+      <span class="header__number" th:text="${userVO.friendList.size()}"></span>
     </div>
-    <section class="friends__section">
-      <header class="friends__section-header">
-        <h6 class="friends_profile-title">My Profile</h6>
-      </header>
-      <div class="friends__section-rows">
-        <div class="friends__section-row">
-          <a href="profile">
-            <img th:src="@{/images/avatar.png}" alt="">
-            Seungyong Lee
-          </a>
-        </div>
-        <div class="friends__section-row">
-          <img th:src="@{/images/avatar.png}" alt="">
-          <span class="friends__section-name">Friends'Names Display</span>
-        </div>
-      </div>
-    </section>
-    <section class="friends__section">
-      <header class="friends__section-header">
-        <h6 class="friends__section-title">Friends</h6>
-      </header>
-      <div class="friends__section-rows">
-        <div class="friends__section-row with-tagline">
-          <div class="friends__section-column">
-            <img th:src="@{/images/avatar.png}" alt="">
-            <span class="friends__section-name">Minji Lee</span>
-          </div>
-            <span class="friends__section-tagline">Life is short. so live your life.</span>
-        </div>
-      </div>
-    </section>
-  </main>
-  <th:block th:replace="/layout/fragments/footer.html :: footerFragment" />
-  <div class="bigScreenText">
-    Please make your screen smaller
+    <div class="header__column">
+      <i class="fa fa-cog"></i>
+    </div>
   </div>
-  <script>
-    window.onload = function() {
-      var tabs = document.querySelectorAll('.tab-bar__tab');
-      tabs.forEach(function(tab) {
-        tab.classList.remove('tab-bar__tab--selected');
-        if (tab.id === 'tab1') {
-          tab.classList.add('tab-bar__tab--selected');
-        }
-      });
+</header>
+<main class="friends">
+  <div class="search-bar">
+    <i class="fa fa-search"></i>
+    <input type="text" id="findFriend" onkeyup="enterFindFriend()" placeholder="아이디를 입력하여 채팅을 시작"/>
+  </div>
+
+  <!-- 나의 프로필 -->
+  <section class="friends__section">
+    <header class="friends__section-header">
+      <h6 class="friends_profile-title">나의 프로필</h6>
+    </header>
+    <div class="friends__section-rows">
+      <div class="friends__section-row with-tagline">
+        <div class="friends__section-column">
+          <img th:src="@{'/profile/' + ${userVO.lginData.userId} + '.png'}" alt=""
+               onerror="this.src='/images/avatar.png'"
+               th:onclick="'location.href=\'/userProfile/'+ @{${userVO.lginData.userId}} + '\''">
+          <span class="friends__section-name" th:text="${userVO.lginData.userName}"></span>
+        </div>
+        <span class="friends__section-tagline" th:text="${userVO.lginData.statMsg}"></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 즐겨찾기 -->
+  <section class="friends__section">
+    <header class="friends__section-header">
+      <h6 class="friends_profile-title">즐겨찾기</h6>
+    </header>
+    <div class="friends__section-rows" id="bookmark_row">
+      <!-- 즐겨찾기 친구목록 -->
+    </div>
+  </section>
+
+  <!-- 나머지 친구목록 -->
+  <section class="friends__section">
+    <header class="friends__section-header">
+      <h6 class="friends__section-title">친구목록</h6>
+    </header>
+    <div class="friends__section-rows" id="etc_row">
+      <!-- 나머지 친구목록 -->
+    </div>
+  </section>
+</main>
+
+<th:block th:replace="layout/fragments/footer.html :: footerFragment"/>
+<div class="bigScreenText">
+  Please make your screen smaller
+</div>
+<script th:inline="javascript">
+  window.onload = function () {
+    var tabs = document.querySelectorAll('.tab-bar__tab');
+    tabs.forEach(function (tab) {
+      tab.classList.remove('tab-bar__tab--selected');
+      if (tab.id === 'tab1') {
+        tab.classList.add('tab-bar__tab--selected');
+      }
+    });
+
+    // 친구목록 불러오기
+    var friendList = [[${userVO.friendList}]];
+    for (var i = 0; i < friendList.length; i++) {
+      var friend = friendList[i];
+      var str = '';
+
+      str += '<div class="friends__section-row with-tagline">';
+      str += '  <div class="friends__section-column">';
+      str += '      <img src="/profile/' + friend.friendId + '.png" alt="" onerror="this.src=\'/images/avatar.png\'" onclick="location.href=\'/userProfile/' + friend.friendId + '\'">';
+      str += '      <span class="friends__section-name">' + friend.friendName;
+      str += '      </span>';
+      if (friend.bookmarkYn === 'Y') {
+        str += '&nbsp<i class="fa fa-star" onclick="bookmarkOnOff('+"'off'"+')"></i>';
+      } else {
+        str += '&nbsp<i class="fa fa-star-o" onclick="bookmarkOnOff('+"'on'"+')"></i>';
+      }
+      str += '  </div>';
+      str += '  <span class="friends__section-tagline">' + friend.friendStatMsg + '</span>';
+      str += '</div>';
+
+      if (friend.bookmarkYn === 'Y') {
+        $("#bookmark_row").append(str);
+      } else {
+        $("#etc_row").append(str);
+      }
     }
-  </script>
+  }
+
+  function enterFindFriend() {
+    if (window.event.keyCode === 13) {
+      var data = {
+        userId: $('#findFriend').val()
+      }
+
+      // API 호출
+      openModal();
+      postApi('/findFriend', data, onFindFriendSuccess, onFindFriendError);
+    }
+  }
+
+  function onFindFriendSuccess(data) {
+    closeModal();
+    if (data.existYn !== 'Y') {
+      alert('유저가 존재하지 않습니다');
+    } else {
+      window.location.replace('/userProfile/' + data.userId);
+    }
+  }
+
+  function onFindFriendError(err) {
+    closeModal();
+    alert(err.responseJSON.exception.errorMessage);
+  }
+
+  function bookmarkOnOff(onoff) {
+    var type = onoff === 'on' ? '등록' : '해제';
+    var check = confirm('즐겨찾기를 '+type+"하시겠습니까?" );
+    if(check){
+      alert(type+"기능 만드는중입니다.");
+    }
+  }
+
+</script>
 </body>
 </html>

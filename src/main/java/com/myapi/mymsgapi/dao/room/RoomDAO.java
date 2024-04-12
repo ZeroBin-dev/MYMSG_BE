@@ -2,6 +2,7 @@ package com.myapi.mymsgapi.dao.room;
 
 import com.myapi.mymsgapi.model.MemberInfo;
 import com.myapi.mymsgapi.model.RoomInfo;
+import com.myapi.mymsgapi.model.RoomMember;
 import com.myapi.mymsgapi.model.UserRoomInfo;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -19,4 +20,7 @@ public interface RoomDAO {
 
   List<MemberInfo> selectMemberInfo(final String roomId);
 
+  int insertRoomInfo(final RoomInfo roomInfo);
+
+  int insertRoomMember(final RoomMember roomMember);
 }

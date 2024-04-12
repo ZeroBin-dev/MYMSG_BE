@@ -1,4 +1,11 @@
 spring:
+  thymeleaf:
+    enabled: true
+    cache: true
+    prefix: classpath:templates/
+    suffix: .html
+    check-template-location: true
+
   message:
     basename: /message/errorMsg
     encoding: UTF-8
@@ -28,39 +35,41 @@ spring:
   datasource:
     #jndi-name: jndi/mariadb
     driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
-    url: jdbc:log4jdbc:mariadb://192.168.202.13:3306/MYMSG?useUnicode=true&characterEncoding=utf8
-    username: ${MARIA_DB_USER}
-    password: ${MARIA_DB_PASS}
+    url: jdbc:log4jdbc:mariadb://dudqls3kr.cafe24.com:3306/dudqls3kr?useUnicode=true&characterEncoding=utf8
+    username: dudqls3kr
+    password: dkapflRksh1!
     jmx-enable: false
 
   data:
     redis:
       port: 6379
-      host: 192.168.202.13
+      host: 127.0.0.1
       password: admin
 
-  file:
-    base-path: "D:\\cyb\\images\\profile\\"
+  graphql:
+    websocket:
+      path: 192.168.202.13:32000
+
 
 ---
 spring:
   config:
     activate:
-      on-profile: "test"
+      on-profile: "prod"
 
   datasource:
-    #jndi-name: jndi/mariadb
-    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
-    url: jdbc:log4jdbc:mariadb://192.168.202.13:3306/MYMSG?useUnicode=true&characterEncoding=utf8
-    username: ${MARIA_DB_USER}
-    password: ${MARIA_DB_PASS}
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://dudqls3kr.cafe24.com:3306/dudqls3kr?useUnicode=true&characterEncoding=utf8
+    username: dudqls3kr
+    password: dkapflRksh1!
     jmx-enable: false
 
   data:
     redis:
-      port: 6379
-      host: 192.168.202.13
-      password: admin
+      port: 22529
+      host: dudqls4kr.cafe24.com
+      password:
 
-  file:
-    base-path: "D:\\cyb\\images\\profile\\"
+  graphql:
+    websocket:
+      path: 210.114.6.196:8831

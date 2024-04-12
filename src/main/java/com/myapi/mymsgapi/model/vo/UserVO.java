@@ -1,5 +1,6 @@
 package com.myapi.mymsgapi.model.vo;
 
+import com.myapi.mymsgapi.model.UserFriendInfo;
 import com.myapi.mymsgapi.model.UserLginInfo;
 import com.myapi.mymsgapi.model.UserRoomInfo;
 import lombok.Getter;
@@ -20,5 +21,5 @@ public class UserVO implements Serializable {
   private String lginYn;
   private UserLginInfo lginData;
   private List<UserRoomInfo> roomList;
-
+  private List<UserFriendInfo> friendList;
 }

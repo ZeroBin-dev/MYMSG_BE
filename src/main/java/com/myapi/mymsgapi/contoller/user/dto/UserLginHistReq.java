@@ -1,7 +1,6 @@
 package com.myapi.mymsgapi.contoller.user.dto;
 
 import com.myapi.mymsgapi.contoller.comm.dto.BaseRequest;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;

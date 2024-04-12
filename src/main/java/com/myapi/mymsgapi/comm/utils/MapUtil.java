@@ -1,8 +1,8 @@
 package com.myapi.mymsgapi.comm.utils;
 
-import com.myapi.mymsgapi.comm.fundamental.YBMap;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
+import com.myapi.mymsgapi.comm.fundamental.YBMap;
 
 import java.util.Map;
 
@@ -24,9 +24,9 @@ public class MapUtil {
   public <T> T to(final Class<T> classDef) {
     ObjectMapper mapper = new ObjectMapper();
 
-    try{
+    try {
       return (new ObjectMapper()).readValue(new Gson().toJson(_map), classDef);
-    }catch(Exception e){
+    } catch (Exception e) {
       return null;
     }
   }

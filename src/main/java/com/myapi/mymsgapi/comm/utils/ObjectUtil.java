@@ -1,5 +1,6 @@
 package com.myapi.mymsgapi.comm.utils;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -24,8 +25,13 @@ public class ObjectUtil {
   public static <T> T jsonToObject(String jsonString, Class<T> type) {
     return (jsonString != null) ? gson.fromJson(jsonString, type) : null;
   }
+
   public static <T> T jsonToObject(JsonObject jsonObject, Class<T> type) {
     return (jsonObject != null) ? gson.fromJson(jsonObject, type) : null;
+  }
+
+  public static String objectToJsonString(Object obj) throws Exception {
+    return new ObjectMapper().writeValueAsString(obj);
   }
 
   public static JsonObject toJson(final String p) {

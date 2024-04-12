@@ -19,7 +19,7 @@ public class SessionUtil {
     return "Y".equals(getUserVO().getLginYn());
   }
 
-  public static void removeUserVO(){
+  public static void removeUserVO() {
     SessionStore.remove(SessionKeys.USER_VO);
   }
 

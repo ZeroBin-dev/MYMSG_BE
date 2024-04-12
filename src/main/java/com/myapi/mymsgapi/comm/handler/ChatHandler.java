@@ -1,8 +1,5 @@
 package com.myapi.mymsgapi.comm.handler;
 
-import com.google.gson.JsonObject;
-import com.myapi.mymsgapi.comm.utils.ObjectUtil;
-import com.myapi.mymsgapi.model.ChatMessage;
 import com.myapi.mymsgapi.service.redis.RedisService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -21,6 +18,7 @@ import java.util.Map;
 public class ChatHandler extends TextWebSocketHandler {
   private static Map<String, List<WebSocketSession>> roomSessionsMap = new HashMap<>();
   private final RedisService _redisService;
+
   // 연결(클라이언트 접속)
   @Override
   public void afterConnectionEstablished(WebSocketSession session) throws Exception {

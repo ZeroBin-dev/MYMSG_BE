@@ -1,8 +1,7 @@
 package com.myapi.mymsgapi.contoller.user;
 
+import com.myapi.mymsgapi.contoller.user.dto.*;
 import com.myapi.mymsgapi.contoller.comm.dto.BaseUpdateResponse;
-import com.myapi.mymsgapi.contoller.user.dto.UserLginReq;
-import com.myapi.mymsgapi.contoller.user.dto.UserRegsReq;
 import com.myapi.mymsgapi.model.vo.UserVO;
 import com.myapi.mymsgapi.service.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,6 +29,26 @@ public class UserApiController {
   @Operation(summary = "회원가입", description = "회원가입 처리")
   public BaseUpdateResponse userJnProc(@RequestBody @Validated UserRegsReq params) {
     return _userService.userJnProc(params);
+  }
+
+  /**
+   * 친구추가하기
+   */
+  @ResponseBody
+  @PostMapping(value = "/addFriend")
+  @Operation(summary = "친구추가", description = "친구추가하기")
+  public BaseUpdateResponse addFriend(@RequestBody @Validated AddFriendReq params) {
+    return _userService.addFriend(params);
+  }
+
+  /**
+   * 친구찾기
+   */
+  @ResponseBody
+  @PostMapping(value = "/findFriend")
+  @Operation(summary = "친구찾기", description = "친구찾기")
+  public FindFriendRes findFriend(@RequestBody @Validated FindFriendReq params) {
+    return _userService.findFriend(params);
   }
 
 }

@@ -52,8 +52,8 @@ public class RedisService {
   public List<ChatMessage> getRoomMessageList(final String roomId) {
     ArrayList<ChatMessage> chatMessages = new ArrayList<>();
 
-    List<String> messages = __getList("room:"+roomId+":messages");
-    for(String message : messages){
+    List<String> messages = __getList("room:" + roomId + ":messages");
+    for (String message : messages) {
       chatMessages.add(ObjectUtil.jsonToObject(message, ChatMessage.class));
     }
 
@@ -62,16 +62,16 @@ public class RedisService {
 
   /**
    * 대화내용 저장하기
+   * 새로운 대화방 만들기
    */
-  public boolean saveMessage(String roomId, String jsonString){
+  public boolean saveMessage(String roomId, String jsonString) {
     try {
       this.__appendToList(roomId, jsonString);
       return true;
-    } catch (Exception e){
+    } catch (Exception e) {
       return false;
     }
   }
-
 
   /*******************************************************************************************************************/
   /*******************************************************************************************************************/

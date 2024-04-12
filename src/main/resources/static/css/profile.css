@@ -3,8 +3,8 @@
 }
 
 .profile .profile__header {
-  height: 80vh;
-  background-image: url("http://www.marlboroughlondon.com/wp-content/uploads/2015/06/Riley_Sideways_2010.png");
+  height: 60vh;
+  background-image: url("../images/profile_bg.png");
   background-position: center center;
   background-size: 100%;
   width: 100%;
