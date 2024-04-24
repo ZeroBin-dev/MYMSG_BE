@@ -37,7 +37,16 @@ public class RedisService {
         JsonObject lastMsg = this.__getLast("room:" + roomInfo.getRoomId() + ":messages");
         if (ObjectUtil.isNotEmpty(lastMsg)) {
           roomInfo.setLastMsg(lastMsg.get("message").getAsString());
-          roomInfo.setLastMsgDt(lastMsg.get("time").getAsString());
+
+          // 2024-04-05 10:42:41
+          String time = lastMsg.get("time").getAsString();
+          String msgTime = "";
+          if(StringUtil.isNotEmpty(time)){
+            msgTime = time.substring(2,4) + "/" + time.substring(5,7) + "/" + time.substring(8, 10) + " " +
+                            time.substring(11,13)+":"+time.substring(14,16);
+          }
+
+          roomInfo.setLastMsgDt(msgTime);
         }
       } catch (Exception e) {
       }

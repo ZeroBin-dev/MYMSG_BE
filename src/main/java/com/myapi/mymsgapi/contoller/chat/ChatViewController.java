@@ -59,4 +59,10 @@ public class ChatViewController {
     return "views/chat/userProfile";
   }
 
+  @GetMapping(value = "/roomInfo/{roomId}")
+  @LoginCheck(required = true)
+  public String roomInfo(final Model model, @PathVariable String roomId) {
+    return "views/chat/roomInfo";
+  }
+
 }

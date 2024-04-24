@@ -8,8 +8,8 @@ import com.myapi.mymsgapi.comm.utils.CryptoUtil;
 import com.myapi.mymsgapi.comm.utils.HttpRequestUtil;
 import com.myapi.mymsgapi.comm.utils.ObjectUtil;
 import com.myapi.mymsgapi.comm.utils.SessionUtil;
-import com.myapi.mymsgapi.contoller.user.dto.*;
 import com.myapi.mymsgapi.contoller.comm.dto.BaseUpdateResponse;
+import com.myapi.mymsgapi.contoller.user.dto.*;
 import com.myapi.mymsgapi.dao.user.UserDAO;
 import com.myapi.mymsgapi.model.UserFriendInfo;
 import com.myapi.mymsgapi.model.UserLginInfo;
@@ -18,8 +18,14 @@ import com.myapi.mymsgapi.model.vo.UserLginHistVO;
 import com.myapi.mymsgapi.model.vo.UserVO;
 import com.myapi.mymsgapi.service.redis.RedisService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 @Service
@@ -28,6 +34,9 @@ public class UserService {
 
   private final UserDAO _userDAO;
   private final RedisService _redisService;
+
+  @Value("${spring.file.profile-upload-path}")
+  private String _profilePath;
 
   /**
    * 로그인 처리
@@ -73,19 +82,19 @@ public class UserService {
     return SessionUtil.getUserVO();
   }
 
-  private void __setLoginResult(UserVO userVO, UserLginInfo loginResult){
+  private void __setLoginResult(UserVO userVO, UserLginInfo loginResult) {
     userVO.setLginYn("Y");
     userVO.setLginData(loginResult);
     SessionUtil.setUserVO(userVO);
   }
 
-  private void __setRoomList(UserVO userVO, String userId){
+  private void __setRoomList(UserVO userVO, String userId) {
     List<UserRoomInfo> userRoomInfo = _redisService.getUserRoomList(userId);
     userVO.setRoomList(userRoomInfo);
     SessionUtil.setUserVO(userVO);
   }
 
-  private void __setFriendList(UserVO userVO, String userId){
+  private void __setFriendList(UserVO userVO, String userId) {
     List<UserFriendInfo> userFriendInfo = _userDAO.selectFriendList(userId);
     userVO.setFriendList(userFriendInfo);
     SessionUtil.setUserVO(userVO);
@@ -136,7 +145,7 @@ public class UserService {
   public BaseUpdateResponse addFriend(final AddFriendReq params) {
     BaseUpdateResponse res = new BaseUpdateResponse();
     int count = _userDAO.selectFindFriend(params);
-    if(count > 0){
+    if (count > 0) {
       res.setSuccYn("N");
       res.setMsg("해당 유저는 이미 친구입니다.");
       return res;
@@ -165,4 +174,73 @@ public class UserService {
   public FindFriendRes findFriend(final FindFriendReq params) {
     return _userDAO.selectFindFriendId(params);
   }
+
+  /**
+   * 즐겨찾기 업데이트
+   */
+  public BaseUpdateResponse updateBookmark(final UpdateBookmarkReq params) {
+    BaseUpdateResponse res = new BaseUpdateResponse();
+    String type = "Y".equals(params.getBookmarkOnOff()) ? "등록" : "해제";
+
+    _userDAO.updateBookmark(params);
+
+    // 유저세션 업데이트
+    UserVO userVO = SessionStore.getAs(SessionKeys.USER_VO, UserVO.class);
+    this.__setFriendList(userVO, params.getUserId());
+
+    res.setSuccYn("Y");
+    res.setMsg("즐겨찾기 " + type + "처리가 완료되었습니다.");
+    return res;
+  }
+
+  /**
+   * 상태메세지 변경
+   */
+  public BaseUpdateResponse updateStatMsg(final UpdateStatMsgReq params) {
+    BaseUpdateResponse res = new BaseUpdateResponse();
+
+    _userDAO.updateStatMsg(params);
+
+    UserVO userVO = SessionStore.getAs(SessionKeys.USER_VO, UserVO.class);
+    userVO.getLginData().setStatMsg(params.getStatMsg());
+    SessionUtil.setUserVO(userVO);
+
+    res.setSuccYn("Y");
+    res.setMsg("상태메세지 변경이 완료되었습니다.");
+    return res;
+  }
+
+  /**
+   * 프로필사진 변경
+   */
+  public BaseUpdateResponse updateProfileImage(MultipartFile file) {
+    BaseUpdateResponse res = new BaseUpdateResponse();
+    if (file != null && !file.isEmpty() && file.getSize() <= 102400) { // 100kb 이하
+      try {
+        String uploadDir = _profilePath;
+        String fileName = SessionStore.getAs(SessionKeys.USER_VO, UserVO.class).getLginData().getUserId() + ".png";
+
+        Path uploadPath = Paths.get(uploadDir);
+        if (!Files.exists(uploadPath)) {
+          Files.createDirectories(uploadPath);
+        }
+        Path filePath = uploadPath.resolve(fileName);
+        File targetFile = filePath.toFile();
+        file.transferTo(targetFile);
+
+        // 업로드 성공 메시지 설정
+        res.setSuccYn("Y");
+        res.setMsg("프로필 이미지가 성공적으로 업로드되었습니다.");
+      } catch (Exception e) {
+        res.setSuccYn("N");
+        res.setMsg(e.getMessage());
+      }
+    } else {
+      res.setSuccYn("N");
+      res.setMsg("허용가능한 용량(20kb)을 초과했습니다.");
+    }
+
+    return res;
+  }
+
 }

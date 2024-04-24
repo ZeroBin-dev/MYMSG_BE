@@ -8,6 +8,5 @@ import lombok.Setter;
 public class MemberInfo {
   private String userId;
   private String userName;
-  private String profilePath;
   private String statMsg;
 }

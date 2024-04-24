@@ -11,7 +11,7 @@
       </a>
     </div>
     <div class="header__column">
-<!--      <i class="fa fa-star-o fa-lg"></i>-->
+      <!--      <i class="fa fa-star-o fa-lg"></i>-->
     </div>
   </div>
 </header>
@@ -23,16 +23,33 @@
     </div>
   </header>
   <div class="profile__container">
-    <input type="text" id="roomName" placeholder="방이름">
+    <th:block th:if="${userVO.lginData.userId == profileInfo.userId}">
+      <input type="text" id="editStatMsg" th:placeholder="${userVO.lginData.statMsg}">
+    </th:block>
+
     <div class="profile__actions">
       <!-- 본인 -->
       <th:block th:if="${userVO.lginData.userId == profileInfo.userId}">
-        <div class="profile__action" id="changeProfile">
+
+        <div class="profile__action" id="changeProfileMsg">
           <span class="profile__action-circle">
             <i class="fa fa-pencil fa-lg"></i>
           </span>
-          <span class="profile__action-title">프로필 변경</span>
+          <span class="profile__action-title">메세지 변경</span>
         </div>
+
+        <div class="profile__action">
+              <span class="profile__action-circle" id="changeProfileImg" onclick="clickProfile()">
+                <i class="fa fa-camera fa-lg"></i>
+              </span>
+              <span class="profile__action-title">사진 변경(png)</span>
+          <form id="uploadForm" enctype="multipart/form-data">
+            <input type="file" id="imgFile" name="file" accept="image/*" style="display: none" />
+            <button type="submit" id="uploadButton" style="display: none">사진변경</button>
+          </form>
+          <span class="profile__action-title" id="fileName"></span>
+        </div>
+
       </th:block>
 
       <!-- 타인 -->
@@ -66,7 +83,7 @@
     // 채팅시작버튼 클릭
     $('#newChat').on('click', (function () {
       var userIdList = [userId, profileUserId];
-      var roomName = $('#roomName').val();
+      var roomName = prompt("채팅방 이름을 입력하세요.", "")
 
       var data = {
         userIdList: userIdList,
@@ -74,17 +91,12 @@
       }
       // API 호출
       openModal();
-      postApi('/newChat', data, onNewChatSuccess, onNewChatError);
+      postApi('/newChat', data, onNewChatSuccess, onApiError);
     }));
 
     function onNewChatSuccess(data) {
       closeModal();
       window.location.replace('/chat/' + data.roomId);
-    }
-
-    function onNewChatError(err) {
-      closeModal();
-      alert(err.responseJSON.exception.errorMessage);
     }
 
     // 친구추가버튼 클릭
@@ -95,12 +107,12 @@
       }
       // API 호출
       openModal();
-      postApi('/addFriend', data, onAddFriendSuccess, onAddFriendError);
+      postApi('/addFriend', data, onAddFriendSuccess, onApiError);
     }));
 
     function onAddFriendSuccess(data) {
       closeModal();
-      if(data.succYn !== 'Y'){
+      if (data.succYn !== 'Y') {
         alert(data.msg);
       } else {
         alert('친구추가 요청이 완료되었습니다.')
@@ -108,12 +120,70 @@
       }
     }
 
-    function onAddFriendError(err) {
-      closeModal();
-      alert(err.responseJSON.exception.errorMessage);
-    }
+    // 상태메세지 변경클릭
+    $('#changeProfileMsg').on('click', (function () {
+      var check = confirm("상태메세지를 변경하시겠습니까?");
 
+      if (check) {
+        var data = {
+          userId: userId,
+          statMsg: $('#editStatMsg').val()
+        }
+        // API 호출
+        openModal();
+        postApi('/updateStatMsg', data, onUpdateStatMsgSuccess, onApiError);
+      }
+    }));
+
+    function onUpdateStatMsgSuccess(data) {
+      closeModal();
+      alert(data.msg)
+      window.location.replace('/userProfile/' + userId);
+    }
   });
+
+  document.getElementById('uploadForm').addEventListener('submit', function (event) {
+    event.preventDefault(); // 기본 이벤트 제거
+
+    var formData = new FormData(this); // 폼 데이터 생성
+    openModal(); // 모달 열기
+    fetch('/updateProfileImage', {
+      method: 'POST',
+      body: formData
+    })
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new Error('Network response was not ok.');
+      })
+      .then(data => {
+        closeModal(); // 모달 닫기
+        alert(data.msg);
+        location.reload();
+      })
+      .catch(error => {
+        closeModal(); // 모달 닫기
+        alert(error);
+      });
+  });
+
+  document.getElementById('imgFile').addEventListener('change', function () {
+    const input = document.getElementById('imgFile');
+
+    if (input.files && input.files.length > 0) {
+      const fileNameDiv = document.getElementById('fileName');
+      fileNameDiv.textContent = '파일명 : '+input.files[0].name;
+      $('#uploadButton').show();
+    } else {
+      $('#uploadButton').hide();
+    }
+  });
+
+  function clickProfile(){
+    $('#imgFile').click();
+  }
+
 </script>
 
 </body>

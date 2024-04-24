@@ -34,8 +34,8 @@ spring:
 
   datasource:
     #jndi-name: jndi/mariadb
-    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
-    url: jdbc:log4jdbc:mariadb://dudqls3kr.cafe24.com:3306/dudqls3kr?useUnicode=true&characterEncoding=utf8
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://dudqls3kr.cafe24.com:3306/dudqls3kr?useUnicode=true&characterEncoding=utf8
     username: dudqls3kr
     password: dkapflRksh1!
     jmx-enable: false
@@ -49,6 +49,10 @@ spring:
   graphql:
     websocket:
       path: 192.168.202.13:32000
+
+  file:
+    profile-path: file:///D:/zeroBin/profile/
+    profile-upload-path: D:/zeroBin/profile/
 
 
 ---
@@ -73,3 +77,7 @@ spring:
   graphql:
     websocket:
       path: 210.114.6.196:8831
+
+  file:
+    profile-path: /dudqls3kr/image/profile/
+    profile-upload-path: /dudqls3kr/image/profile/

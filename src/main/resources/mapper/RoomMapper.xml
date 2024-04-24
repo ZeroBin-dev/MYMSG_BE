@@ -11,7 +11,7 @@
     RI.ROOM_NAME,
     COUNT(RM.MEMBER_ID) AS MEMBER_COUNT,
     GROUP_CONCAT(
-    IF(RM.MEMBER_ID != #{userId}, UM.PROFILE_PATH, NULL)
+    IF(RM.MEMBER_ID != #{userId}, UM.USER_ID, NULL)
     SEPARATOR ','
     ) AS PROFILES
     FROM
@@ -38,9 +38,10 @@
   </select>
 
   <select id="selectMemberInfo" parameterType="String" resultType="com.myapi.mymsgapi.model.MemberInfo">
-    SELECT UM.USER_ID , UM.USER_NAME , UM.PROFILE_PATH , IFNULL(UM.STAT_MSG, '') AS STAT_MSG
-    FROM USER_MASTER UM INNER JOIN ROOM_MEMBER RM
-    ON UM.USER_ID = RM.MEMBER_ID
+    SELECT UM.USER_ID, UM.USER_NAME, IFNULL(UM.STAT_MSG, '') AS STAT_MSG
+    FROM USER_MASTER UM
+           INNER JOIN ROOM_MEMBER RM
+                      ON UM.USER_ID = RM.MEMBER_ID
     WHERE RM.ROOM_ID = #{roomId}
   </select>
 

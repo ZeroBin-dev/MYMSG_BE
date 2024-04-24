@@ -11,7 +11,6 @@
     USER_ID
     ,USER_NAME
     ,PW_ERR_CNT
-    ,PROFILE_PATH
     ,IFNULL(STAT_MSG, '') AS STAT_MSG
     FROM USER_MASTER
     WHERE 1=1
@@ -90,7 +89,6 @@
          , USER_NAME
          , DATE_FORMAT(REG_DT, '%Y-%m-%d %H:%i:%s') AS REG_DT
          , DATE_FORMAT(MOD_DT, '%Y-%m-%d %H:%i:%s') AS MOD_DT
-         , PROFILE_PATH
          , IFNULL(STAT_MSG, '') AS STAT_MSG
     FROM USER_MASTER
     WHERE USER_ID = #{userId}
@@ -123,5 +121,17 @@
     FROM USER_MASTER
     WHERE USER_ID = #{userId}
   </select>
+
+  <update id="updateBookmark" parameterType="com.myapi.mymsgapi.contoller.user.dto.UpdateBookmarkReq">
+    UPDATE USER_FRIEND
+    SET BOOKMARK_YN = #{bookmarkOnOff}
+    WHERE USER_ID = #{userId} AND FRIEND_ID = #{friendId}
+  </update>
+
+  <update id="updateStatMsg" parameterType="com.myapi.mymsgapi.contoller.user.dto.UpdateStatMsgReq">
+    UPDATE USER_MASTER
+    SET STAT_MSG = #{statMsg}
+    WHERE USER_ID = #{userId}
+  </update>
 
 </mapper>

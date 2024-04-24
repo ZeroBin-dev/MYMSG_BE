@@ -1,59 +1,67 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<th:block th:replace="layout/fragments/head.html :: headFragment" />
+<th:block th:replace="layout/fragments/head.html :: headFragment"/>
 <body>
-  <header class="top-header">
-    <th:block th:replace="layout/fragments/header_top.html :: headerTopFragment" />
+<header class="top-header">
+  <th:block th:replace="layout/fragments/header_top.html :: headerTopFragment"/>
 
-    <div class="header__bottom">
-      <div class="header__column"></div>
-      <div class="header__column"><span class="header__text">채팅 <i class="fa fa-caret-down"></i></span></div>
-      <div class="header__column"></div>
-    </div>
+  <div class="header__bottom">
+    <div class="header__column"></div>
+    <div class="header__column"><span class="header__text">채팅 <i class="fa fa-caret-down"></i></span></div>
+    <div class="header__column"></div>
+  </div>
 
-  </header>
-  <main class="chats">
-    <div class="search-bar">
-      <i class="fa fa-search"></i>
-      <input type="text" placeholder="채팅방을 검색해 보세요.">
-    </div>
-    <ul class="chats__list">
-      <li class="chats__chat" th:each="room : ${userVO.roomList}">
-        <a th:href="'chat/'+${room.roomId}">
-          <div class="chat__content">
-            <img th:src="@{/images/avatar.png}">
-            <div class="chat__preview">
-                <h3 class="chat__user" th:text="${room.roomName}+' ['+${room.memberCount}+']'"></h3>
-                <span class="chat__last-message" th:text="${room.lastMsg}"></span>
-            </div>
+</header>
+<main class="chats">
+  <div class="search-bar">
+    <i class="fa fa-search"></i>
+    <input type="text" placeholder="채팅방을 검색해 보세요.">
+  </div>
+  <ul class="chats__list">
+    <li class="chats__chat" th:each="room : ${userVO.roomList}">
+        <div class="chat__content">
+          <!-- 3명이상이면 단체 -->
+          <th:block th:if="${room.memberCount gt '2'}">
+            <img th:src="@{/images/group.png}" onclick="location.href=\'/roomInfo/' + room.roomId + '\'">
+          </th:block>
+          <th:block th:unless="${room.memberCount gt '2'}">
+            <img th:src="@{'/profile/' + ${room.profiles} + '.png'}" alt="" onerror="this.src='/images/avatar.png'"
+                 th:onclick="'location.href=\'/roomInfo/'+ @{${room.roomId}} + '\''" >
+          </th:block>
+
+          <div class="chat__preview" th:onclick="'location.href=\'/chat/'+ @{${room.roomId}} + '\''" >
+            <h4 class="chat__user">[[${room.roomName}]]
+              <span class="chat__members" th:text="${room.memberCount}"></span>
+            </h4>
+            <span class="chat__last-message" th:text="${room.lastMsg}"></span>
           </div>
           <span class="chat__date-time" th:text="${room.lastMsgDt}"></span>
-        </a>
-      </li>
-    </ul>
-      <div class="chat-btn">
-        <i class="fa fa-comment"></i>
-      </div>
-
-  </main>
-  <th:block th:replace="layout/fragments/footer.html :: footerFragment" />
-  <div class="bigScreenText">
-    Please make your screen smaller
+        </div>
+    </li>
+  </ul>
+  <div class="chat-btn">
+    <i class="fa fa-comment"></i>
   </div>
-  <script>
-    window.onload = function() {
-      openModal();
 
-      var tabs = document.querySelectorAll('.tab-bar__tab');
-      tabs.forEach(function(tab) {
-        tab.classList.remove('tab-bar__tab--selected');
-        if (tab.id === 'tab2') {
-          tab.classList.add('tab-bar__tab--selected');
-        }
-      });
+</main>
+<th:block th:replace="layout/fragments/footer.html :: footerFragment"/>
+<div class="bigScreenText">
+  Please make your screen smaller
+</div>
+<script>
+  window.onload = function () {
+    openModal();
 
-      closeModal();
-    }
-  </script>
+    var tabs = document.querySelectorAll('.tab-bar__tab');
+    tabs.forEach(function (tab) {
+      tab.classList.remove('tab-bar__tab--selected');
+      if (tab.id === 'tab2') {
+        tab.classList.add('tab-bar__tab--selected');
+      }
+    });
+
+    closeModal();
+  }
+</script>
 </body>
 </html>

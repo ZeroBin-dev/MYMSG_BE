@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="layout/fragments/head.html :: headFragment"/>
+<body>
+<header class="top-header top-header--transparent">
+  <th:block th:replace="layout/fragments/header_top.html :: headerTopFragment"/>
+  <div class="header__bottom">
+    <div class="header__column">
+      <a href="/chats">
+        <i class="fa fa-times fa-lg"></i>
+      </a>
+    </div>
+    <div class="header__column">
+      <!--      <i class="fa fa-star-o fa-lg"></i>-->
+    </div>
+  </div>
+</header>
+<main class="profile">
+  <header class="profile__header">
+    <div class="profile__header-container">
+      <!-- 프로필사진 목록 -->
+      <img th:src="@{/images/group.png}">
+
+      <!-- 방이름 -->
+      <h3 class="profile-header-title">방이름</h3>
+
+      <!-- 방이름 수정 버튼 -->
+    </div>
+  </header>
+  <div class="profile__container">
+    <input type="text" id="editRoomName">
+    <span class="profile__action-circle">
+      <i class="fa fa-pencil fa-lg"></i>
+    </span>
+    <div class="profile__actions">
+      <div class="profile__action">
+        <span class="profile__action-circle">
+          <i class="fa fa-comment fa-lg"></i>
+        </span>
+        <span class="profile__action-title"></span>
+      </div>
+      <div class="profile__action">
+        <span class="profile__action-circle">
+          <i class="fa fa-user fa-lg"></i>
+        </span>
+        <span class="profile__action-title"></span>
+      </div>
+    </div>
+  </div>
+</main>
+<div class="bigScreenText">
+  Please make your screen smaller
+</div>
+
+<script th:inline="javascript">
+  function openEdge(){
+    window.location = 'microsoft-edge:' + 'http:naver.com';
+  }
+</script>
+
+</body>
+</html>

@@ -30,12 +30,32 @@
   align-items: flex-start;
 }
 
+.chat__preview {
+  display: inline-block;
+  width: 180px;
+}
+
 .chat__preview .chat__user {
   font-weight: 600;
+  display: inline-block;
+  width: 150px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   margin-bottom: 5px;
 }
 
 .chat__preview .chat__last-message {
+  color: #b4b4b4;
+  font-size: 11px;
+  display: inline-block;
+  width: 150px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chat__preview .chat__members {
   color: #b4b4b4;
   font-size: 11px;
 }
@@ -43,6 +63,7 @@
 .chats__chat .chat__date-time {
   font-size: 10px;
   color: #b4b4b4;
+
 }
 
 .chat-btn {

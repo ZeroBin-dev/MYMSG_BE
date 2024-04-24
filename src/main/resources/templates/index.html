@@ -67,6 +67,8 @@
   Please make your screen smaller
 </div>
 <script th:inline="javascript">
+  var userId = [[${userVO.lginData.userId}]];
+
   window.onload = function () {
     var tabs = document.querySelectorAll('.tab-bar__tab');
     tabs.forEach(function (tab) {
@@ -88,9 +90,9 @@
       str += '      <span class="friends__section-name">' + friend.friendName;
       str += '      </span>';
       if (friend.bookmarkYn === 'Y') {
-        str += '&nbsp<i class="fa fa-star" onclick="bookmarkOnOff('+"'off'"+')"></i>';
+        str += '&nbsp<i class="fa fa-star" onclick="bookmarkOnOff(' + "'N', '" + friend.friendName + "', '"+friend.friendId+"'"+')"></i>';
       } else {
-        str += '&nbsp<i class="fa fa-star-o" onclick="bookmarkOnOff('+"'on'"+')"></i>';
+        str += '&nbsp<i class="fa fa-star-o" onclick="bookmarkOnOff(' + "'Y', '" + friend.friendName + "', '"+friend.friendId+"'"+')"></i>';
       }
       str += '  </div>';
       str += '  <span class="friends__section-tagline">' + friend.friendStatMsg + '</span>';
@@ -112,7 +114,7 @@
 
       // API 호출
       openModal();
-      postApi('/findFriend', data, onFindFriendSuccess, onFindFriendError);
+      postApi('/findFriend', data, onFindFriendSuccess, onApiError);
     }
   }
 
@@ -125,17 +127,26 @@
     }
   }
 
-  function onFindFriendError(err) {
-    closeModal();
-    alert(err.responseJSON.exception.errorMessage);
+  function bookmarkOnOff(onoff, name, id) {
+    var type = onoff === 'Y' ? '등록' : '해제';
+    var check = confirm('\'' + name + '\' 님을 즐겨찾기 ' + type + "하시겠습니까?");
+    if (check) {
+      var data = {
+        userId: userId,
+        friendId: id,
+        bookmarkOnOff: onoff
+      }
+
+      // API 호출
+      openModal();
+      postApi('/updateBookmark', data, onUpdateBookmarkSuccess, onApiError);
+    }
   }
 
-  function bookmarkOnOff(onoff) {
-    var type = onoff === 'on' ? '등록' : '해제';
-    var check = confirm('즐겨찾기를 '+type+"하시겠습니까?" );
-    if(check){
-      alert(type+"기능 만드는중입니다.");
-    }
+  function onUpdateBookmarkSuccess(data) {
+    closeModal();
+    alert(data.msg);
+    window.location.replace('/');
   }
 
 </script>

@@ -12,7 +12,7 @@
       </a>
     </div>
     <div class="header__column">
-      <span class="header__text" th:text="${roomVO.roomInfo.roomName}+' ['+${roomVO.roomMembers.size()}+']'"></span>
+      <span class="header__text" th:text="${roomVO.roomInfo.roomName}"></span>
     </div>
     <div class="header__column">
       <i class="fa fa-search"></i>
@@ -51,12 +51,12 @@
 </main>
 
 <div class="type-message">
-  <i class="fa fa-plus fa-lg"></i>
+  <i class="fa fa-plus fa-lg" onclick="inviteUser()"></i>
   <div class="type-message__input">
     <input type="text" id="messageInput" onkeyup="handleKeyPress()">
     <i class="fa fa-smile-o fa-lg"></i>
-    <span class="record-message">
-      <i class="fa fa-microphone fa-lg"></i>
+    <span class="record-message" onclick="handleOnClickSend()">
+      <i class="fa fa-send fa-lg"></i>
     </span>
   </div>
 </div>
@@ -87,6 +87,17 @@
       sendMessage(message);
       document.getElementById('messageInput').value = ''; // 메시지를 보내고 입력란 비우기
     }
+  }
+
+  function handleOnClickSend() {
+    var message = document.getElementById('messageInput').value;
+    sendMessage(message);
+    document.getElementById('messageInput').value = ''; // 메시지를 보내고 입력란 비우기
+  }
+
+  function inviteUser(){
+    alert('유저초대');
+    var userId = prompt("초대하실 유저 아이디를 입력해주세요.")
   }
 
   ws.onopen = function () {
@@ -128,6 +139,7 @@
     closeModal();
     console.log(error);
     alert('소켓 연결중 오류가 발생하였습니다. 잠시 후 다시 이용해 주시길 바랍니다.');
+    window.location.replace('/chats');
   };
 
   // 메시지를 보내는 함수

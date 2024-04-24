@@ -5,7 +5,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 @Component
-@PropertySource(value = "classpath:properties/constants.properties")
+@PropertySource(value = "classpath:/properties/constants.properties")
 public class Constants {
 
   public static String BASE_USER_ID;

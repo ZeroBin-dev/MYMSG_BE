@@ -11,6 +11,5 @@ public class UserLginInfo {
   private int pwErrCnt;
   private String regDt;
   private String modDt;
-  private String profilePath;
   private String statMsg;
 }

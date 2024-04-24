@@ -51,4 +51,8 @@ public interface UserDAO {
   void insertFriend(final AddFriendReq params);
 
   FindFriendRes selectFindFriendId(final FindFriendReq params);
+
+  void updateBookmark(UpdateBookmarkReq params);
+
+  void updateStatMsg(UpdateStatMsgReq params);
 }

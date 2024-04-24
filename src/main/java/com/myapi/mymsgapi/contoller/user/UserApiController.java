@@ -7,10 +7,8 @@ import com.myapi.mymsgapi.service.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -50,5 +48,35 @@ public class UserApiController {
   public FindFriendRes findFriend(@RequestBody @Validated FindFriendReq params) {
     return _userService.findFriend(params);
   }
+
+  /**
+   * 즐겨찾기 업데이트
+   */
+  @ResponseBody
+  @PostMapping(value = "/updateBookmark")
+  @Operation(summary = "즐겨찾기 변경", description = "즐겨찾기 변경")
+  public BaseUpdateResponse updateBookmark(@RequestBody @Validated UpdateBookmarkReq params) {
+    return _userService.updateBookmark(params);
+  }
+
+  /**
+   * 상태메세지 업데이트
+   */
+  @ResponseBody
+  @PostMapping(value = "/updateStatMsg")
+  @Operation(summary = "상태메세지 변경", description = "상태메세지 변경")
+  public BaseUpdateResponse updateStatMsg(@RequestBody @Validated UpdateStatMsgReq params) {
+    return _userService.updateStatMsg(params);
+  }
+
+  @ResponseBody
+  @PostMapping(value = "/updateProfileImage")
+  @Operation(summary = "프로필사진 변경", description = "프로필사진 변경")
+  public BaseUpdateResponse updateProfileImage(@RequestParam MultipartFile file) {
+    return _userService.updateProfileImage(file);
+  }
+
+
+
 
 }

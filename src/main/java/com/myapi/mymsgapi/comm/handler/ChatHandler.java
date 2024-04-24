@@ -34,7 +34,7 @@ public class ChatHandler extends TextWebSocketHandler {
     // 맵에 업데이트
     roomSessionsMap.put(roomId, roomSessions);
 
-    System.out.println("[{}] 클라이언트 접속" + session);
+    System.out.println("클라이언트 접속 : [ " + session + " ]");
   }
 
   // 연결 종료(클라이언트 접속 해제)
@@ -52,7 +52,7 @@ public class ChatHandler extends TextWebSocketHandler {
     // 맵에 업데이트
     roomSessionsMap.put(roomId, roomSessions);
 
-    System.out.println("[{}] 클라이언트 접속 해제" + session);
+    System.out.println("클라이언트 접속 해제 : [ " + session + " ]");
   }
 
   // 메시지 수신
