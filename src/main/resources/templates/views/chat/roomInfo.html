@@ -11,7 +11,6 @@
       </a>
     </div>
     <div class="header__column">
-      <!--      <i class="fa fa-star-o fa-lg"></i>-->
     </div>
   </div>
 </header>
@@ -19,33 +18,18 @@
   <header class="profile__header">
     <div class="profile__header-container">
       <!-- 프로필사진 목록 -->
-      <img th:src="@{/images/group.png}">
-
-      <!-- 방이름 -->
-      <h3 class="profile-header-title">방이름</h3>
-
-      <!-- 방이름 수정 버튼 -->
+      <th:block th:each="item : ${#strings.arraySplit(roomInfo.roomProfile, ',')}">
+        <img th:src="@{'/profile/' + ${item} + '.png'}" alt=""
+             onerror="this.src='/images/avatar.png'" />
+      </th:block>
     </div>
   </header>
   <div class="profile__container">
-    <input type="text" id="editRoomName">
-    <span class="profile__action-circle">
+    <input type="text" id="editRoomName" th:placeholder="${roomInfo.roomName}">
+    <span class="profile__action-circle" id="changeRoomName">
       <i class="fa fa-pencil fa-lg"></i>
     </span>
-    <div class="profile__actions">
-      <div class="profile__action">
-        <span class="profile__action-circle">
-          <i class="fa fa-comment fa-lg"></i>
-        </span>
-        <span class="profile__action-title"></span>
-      </div>
-      <div class="profile__action">
-        <span class="profile__action-circle">
-          <i class="fa fa-user fa-lg"></i>
-        </span>
-        <span class="profile__action-title"></span>
-      </div>
-    </div>
+    <span class="profile__action-title">방이름 변경하기</span>
   </div>
 </main>
 <div class="bigScreenText">
@@ -53,9 +37,36 @@
 </div>
 
 <script th:inline="javascript">
-  function openEdge(){
-    window.location = 'microsoft-edge:' + 'http:naver.com';
+
+  var roomId = [[${roomInfo.roomId}]];
+
+  // 상태메세지 변경클릭
+  $('#changeRoomName').on('click', (function () {
+    var check = confirm("방이름을 변경하시겠습니까?");
+
+    if (check) {
+      var roomName = $('#editRoomName').val();
+      if(!roomName || roomName === ''){
+        alert('변경할 이름을 입력하세요.');
+        return;
+      }
+
+      var data = {
+        roomId: roomId,
+        roomName: roomName
+      }
+      // API 호출
+      openModal();
+      postApi('/updateRoomName', data, onUpdateStatMsgSuccess, onApiError);
+    }
+  }));
+
+  function onUpdateStatMsgSuccess(data) {
+    closeModal();
+    alert(data.msg)
+    window.location.replace('/roomInfo/' + roomId);
   }
+
 </script>
 
 </body>

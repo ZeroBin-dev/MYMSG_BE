@@ -4,13 +4,13 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
-public class ChatUserJoinReq {
+public class ChatUserInfoReq {
 
   @NotEmpty
-  private List<String> userIdList;
-  private String roomName;
+  private String userId;
+
+  @NotEmpty
+  private String roomId;
 }

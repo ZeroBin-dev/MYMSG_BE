@@ -4,15 +4,12 @@ import com.myapi.mymsgapi.comm.interceptor.LoginCheckInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.CacheControl;
 import org.springframework.web.servlet.config.annotation.*;
-
-import java.util.concurrent.TimeUnit;
 
 @Configuration
 @EnableWebMvc
 @RequiredArgsConstructor
-public class MvcConfig implements WebMvcConfigurer {
+public class WebConfig implements WebMvcConfigurer {
 
   private final LoginCheckInterceptor loginCheckInterceptor;
 

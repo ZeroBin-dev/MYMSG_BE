@@ -48,6 +48,7 @@ public class ChatViewController {
   @GetMapping(value = "/more")
   @LoginCheck(required = true)
   public String more(final Model model) {
+    model.addAttribute("userVO", SessionStore.getAs(SessionKeys.USER_VO, UserVO.class));
     return "views/chat/more";
   }
 
@@ -62,6 +63,7 @@ public class ChatViewController {
   @GetMapping(value = "/roomInfo/{roomId}")
   @LoginCheck(required = true)
   public String roomInfo(final Model model, @PathVariable String roomId) {
+    model.addAttribute("roomInfo", _chatService.getRoomProfileInfo(roomId));
     return "views/chat/roomInfo";
   }
 

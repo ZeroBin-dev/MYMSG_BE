@@ -15,33 +15,33 @@
 <main class="chats">
   <div class="search-bar">
     <i class="fa fa-search"></i>
-    <input type="text" placeholder="채팅방을 검색해 보세요.">
+    <input type="text" placeholder="채팅방을 검색해 보세요." onkeyup="searchRoom(this)">
   </div>
   <ul class="chats__list">
     <li class="chats__chat" th:each="room : ${userVO.roomList}">
-        <div class="chat__content">
-          <!-- 3명이상이면 단체 -->
-          <th:block th:if="${room.memberCount gt '2'}">
-            <img th:src="@{/images/group.png}" onclick="location.href=\'/roomInfo/' + room.roomId + '\'">
-          </th:block>
-          <th:block th:unless="${room.memberCount gt '2'}">
-            <img th:src="@{'/profile/' + ${room.profiles} + '.png'}" alt="" onerror="this.src='/images/avatar.png'"
-                 th:onclick="'location.href=\'/roomInfo/'+ @{${room.roomId}} + '\''" >
-          </th:block>
+      <div class="chat__content">
+        <!-- 3명이상이면 단체 -->
+        <th:block th:if="${room.memberCount gt '2'}">
+          <img th:src="@{/images/group.png}" th:onclick="'location.href=\'/roomInfo/'+ @{${room.roomId}} + '\''">
+        </th:block>
+        <th:block th:unless="${room.memberCount gt '2'}">
+          <img th:src="@{'/profile/' + ${room.profiles} + '.png'}" alt="" onerror="this.src='/images/avatar.png'"
+               th:onclick="'location.href=\'/roomInfo/'+ @{${room.roomId}} + '\''">
+        </th:block>
 
-          <div class="chat__preview" th:onclick="'location.href=\'/chat/'+ @{${room.roomId}} + '\''" >
-            <h4 class="chat__user">[[${room.roomName}]]
-              <span class="chat__members" th:text="${room.memberCount}"></span>
-            </h4>
-            <span class="chat__last-message" th:text="${room.lastMsg}"></span>
-          </div>
-          <span class="chat__date-time" th:text="${room.lastMsgDt}"></span>
+        <div class="chat__preview" th:onclick="'location.href=\'/chat/'+ @{${room.roomId}} + '\''">
+          <h4 class="chat__user">[[${room.roomName}]]
+            <span class="chat__members" th:text="${room.memberCount}"></span>
+          </h4>
+          <span class="chat__last-message" th:text="${room.lastMsg}"></span>
         </div>
+        <span class="chat__date-time" th:text="${room.lastMsgDt}"></span>
+      </div>
     </li>
   </ul>
-  <div class="chat-btn">
-    <i class="fa fa-comment"></i>
-  </div>
+<!--  <div class="chat-btn">-->
+<!--    <i class="fa fa-comment"></i>-->
+<!--  </div>-->
 
 </main>
 <th:block th:replace="layout/fragments/footer.html :: footerFragment"/>
@@ -62,6 +62,23 @@
 
     closeModal();
   }
+
+  function searchRoom(input) {
+    let filter = input.value.toUpperCase();
+    let li = document.getElementsByClassName("chats__chat");
+
+    for (let i = 0; i < li.length; i++) {
+      let chatUser = li[i].getElementsByClassName("chat__user")[0];
+      let txtValue = chatUser.textContent || chatUser.innerText;
+
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        li[i].style.display = "";
+      } else {
+        li[i].style.display = "none";
+      }
+    }
+  }
+
 </script>
 </body>
 </html>

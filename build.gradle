@@ -59,6 +59,15 @@ dependencies {
     implementation 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4:1.16'
     implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
 
+    implementation 'org.springframework.boot:spring-boot-starter-log4j2'
+}
+
+configurations {
+    all {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+        exclude group: 'ch.qos.logback', module: 'logback-classic'
+        exclude group: 'org.apache.logging.log4j', module: 'log4j-to-slf4j'
+    }
 }
 
 tasks.named('test') {

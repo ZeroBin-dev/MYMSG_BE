@@ -16,9 +16,8 @@ spring:
       throw-exception-if-no-handler-found: true
 
 server:
-  port: 32000
+  port: 8831
   servlet:
-    context-path:
     encoding:
       charset: UTF-8
 
@@ -33,12 +32,10 @@ spring:
       on-profile: "local"
 
   datasource:
-    #jndi-name: jndi/mariadb
     driver-class-name: org.mariadb.jdbc.Driver
     url: jdbc:mariadb://dudqls3kr.cafe24.com:3306/dudqls3kr?useUnicode=true&characterEncoding=utf8
     username: dudqls3kr
     password: dkapflRksh1!
-    jmx-enable: false
 
   data:
     redis:
@@ -48,7 +45,7 @@ spring:
 
   graphql:
     websocket:
-      path: 192.168.202.13:32000
+      path: 192.168.202.13:8831
 
   file:
     profile-path: file:///D:/zeroBin/profile/
@@ -66,7 +63,6 @@ spring:
     url: jdbc:mariadb://dudqls3kr.cafe24.com:3306/dudqls3kr?useUnicode=true&characterEncoding=utf8
     username: dudqls3kr
     password: dkapflRksh1!
-    jmx-enable: false
 
   data:
     redis:

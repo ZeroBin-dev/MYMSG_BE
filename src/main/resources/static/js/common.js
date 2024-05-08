@@ -64,3 +64,7 @@ function onApiSuccess(data) {
   alert(data.msg);
 }
 
+function goBack(){
+  window.history.back();
+}
+

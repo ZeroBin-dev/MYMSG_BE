@@ -128,7 +128,7 @@
     WHERE USER_ID = #{userId} AND FRIEND_ID = #{friendId}
   </update>
 
-  <update id="updateStatMsg" parameterType="com.myapi.mymsgapi.contoller.user.dto.UpdateStatMsgReq">
+  <update id="updateStatMsg" parameterType="String">
     UPDATE USER_MASTER
     SET STAT_MSG = #{statMsg}
     WHERE USER_ID = #{userId}

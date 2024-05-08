@@ -31,7 +31,6 @@ public class MessageFilter implements Filter {
 
     JsonNode node = new ObjectMapper().readTree(responseStr);
 
-    // TODO : 메세지 정의
     String status = node.path("status").asText();
     if ("error".equals(status)) {
 

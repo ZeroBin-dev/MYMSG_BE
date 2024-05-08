@@ -15,4 +15,5 @@ public class ChatMessage {
   private String userName; // 사용자명
   private String message; // 메세지
   private String time; // 전송시간
+  private String unread; // 안읽은 횟수
 }

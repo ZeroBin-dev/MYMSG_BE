@@ -16,7 +16,20 @@
     </div>
     <div class="header__column">
       <i class="fa fa-search"></i>
-      <i class="fa fa-bars"></i>
+      <i class="fa fa-bars" onclick="togglePopup()"></i>
+
+      <div class="chat_overlay" id="overlay" style="display:none;">
+        <div class="chat_popup" id="popup">
+          <div>
+            <a onclick="togglePopup()">
+              <i class="fa fa-times fa-lg" aria-hidden="true"></i>
+            </a>
+          </div>
+          <br/>
+          <button onclick="exitRoom()">방나가기</button>
+          <br/>
+        </div>
+      </div>
     </div>
   </div>
 </header>
@@ -32,19 +45,26 @@
     <!-- 내가 보낸 메세지 -->
     <div class="chat__message chat__message-from-me"
          th:if="${message != null and userVO.lginData.userId == message.userId and message.userId != 'system'}">
-      <span class="chat__message-time" th:text="${#strings.substring(message.time, 11, 16)}"></span>
+      <div>
+        <div class="chat__message-unread-me" th:if="${message.unread != '0'}" th:text="${message.unread}"></div>
+        <span class="chat__message-time" th:text="${#strings.substring(message.time, 11, 16)}"></span>
+      </div>
       <span class="chat__message-body" th:text="${message.message}"></span>
     </div>
 
     <!-- 내가 받은 메세지 -->
     <div class="chat__message chat__message-to-me"
          th:if="${message != null and userVO.lginData.userId != message.userId and message.userId != 'system'}">
-      <img th:src="@{'/profile/' + ${message.userId} + '.png'}" alt="" class="chat-message-avatar" onerror="this.src='/images/avatar.png'">
+      <img th:src="@{'/profile/' + ${message.userId} + '.png'}" alt="" class="chat-message-avatar"
+           onerror="this.src='/images/avatar.png'">
       <div class="chat__message-center">
         <h3 class="chat__message-username" th:text="${message.userName}"></h3>
         <span class="chat__message-body" th:text="${message.message}"></span>
       </div>
-      <span class="chat__message-time" th:text="${#strings.substring(message.time, 11, 16)}"></span>
+      <div>
+        <div class="chat__message-unread-you" th:if="${message.unread != '0'}" th:text="${message.unread}"></div>
+        <span class="chat__message-time" th:text="${#strings.substring(message.time, 11, 16)}"></span>
+      </div>
     </div>
   </th:block>
 
@@ -65,11 +85,11 @@
 </div>
 <script th:inline="javascript">
 
-  window.onload = function() {
+  window.onload = function () {
     scrollDown();
   };
 
-  function scrollDown(){
+  function scrollDown() {
     window.scrollTo(0, document.body.scrollHeight);
   }
 
@@ -79,7 +99,7 @@
   var ws_url = [[${wsUrl}]];
 
   openModal();
-  const ws = new WebSocket("ws://"+ws_url+"/ws/chatting/" + roomId);
+  const ws = new WebSocket("ws://" + ws_url + "/ws/chatting/" + roomId);
 
   function handleKeyPress() {
     if (window.event.keyCode === 13) {
@@ -95,9 +115,21 @@
     document.getElementById('messageInput').value = ''; // 메시지를 보내고 입력란 비우기
   }
 
-  function inviteUser(){
-    alert('유저초대');
-    var userId = prompt("초대하실 유저 아이디를 입력해주세요.")
+  function inviteUser() {
+    let userId = prompt("초대하실 유저 아이디를 입력해주세요.")
+
+    if(!userId || userId === ''){
+      return;
+    }
+
+    let data = {
+      userId: userId,
+      roomId: roomId
+    }
+
+    // API 호출
+    openModal();
+    postApi('/inviteRoom', data, onApiSuccess, onApiError);
   }
 
   ws.onopen = function () {
@@ -106,25 +138,39 @@
   };
 
   ws.onmessage = function (event) {
-    var message = event.data;
-    console.log("받은메세지 : " + message);
-    var data = JSON.parse(message);
-    var str = '';
-    if (data.userId == userId) {
+    let message = event.data;
+    let data = JSON.parse(message);
+    let str = '';
+    if (data.userId === userId) {
       // 내가 보낸 메세지
       str += '<div class="chat__message chat__message-from-me">';
-      str += '  <span class="chat__message-time">' + data.time.substring(11, 16) + '</span>';
+      str += '  <div>';
+      if(data.unread && data.unread !== '0'){
+        str += '    <div class="chat__message-unread-me">'+data.unread+'</div>';
+      }
+      str += '    <span class="chat__message-time">' + data.time.substring(11, 16) + '</span>';
+      str += '  </div>';
       str += '  <span class="chat__message-body">' + data.message + '</span>';
+      str += '</div>';
+    } else if(data.userId === 'system'){
+      // 시스템이 보낸 메세지
+      str += ' <div class="date-divider"">';
+      str += '  <span class="date-divider__text">' + data.message + '</span>';
       str += '</div>';
     } else {
       // 상대가 보낸 메세지
       str += ' <div class="chat__message chat__message-to-me">';
-      str += '<img src="/profile/' + data.userId + '.png" alt="" class="chat-message-avatar" onerror="this.src=\'/images/avatar.png\'">';
-      str += '    <div class="chat__message-center">';
-      str += '     <h3 class="chat__message-username">' + data.userName + '</h3>';
-      str += '      <span class="chat__message-body">' + data.message + '</span>';
-      str += '   </div>';
+      str += '  <img src="/profile/' + data.userId + '.png" alt="" class="chat-message-avatar" onerror="this.src=\'/images/avatar.png\'">';
+      str += '  <div class="chat__message-center">';
+      str += '    <h3 class="chat__message-username">' + data.userName + '</h3>';
+      str += '    <span class="chat__message-body">' + data.message + '</span>';
+      str += '  </div>';
+      str += '  <div>';
+      if(data.unread && data.unread !== '0'){
+        str += '    <div class="chat__message-unread-you">'+data.unread+'</div>';
+      }
       str += '    <span class="chat__message-time">' + data.time.substring(11, 16) + '</span>';
+      str += '  </div>';
       str += ' </div>';
     }
     $("#chatList").append(str);
@@ -145,9 +191,9 @@
   // 메시지를 보내는 함수
   function sendMessage(message) {
     if (ws.readyState === WebSocket.OPEN) {
-      var currentTime = getCurrentTime();
-      var messageId = userId+"_"+roomId+"_"+currentTime;
-      var data = {
+      let currentTime = getCurrentTime();
+      let messageId = userId + "_" + roomId + "_" + currentTime;
+      let data = {
         messageId: messageId,
         message: message,
         userId: userId,
@@ -156,8 +202,6 @@
       };
 
       ws.send(JSON.stringify(data));
-      console.log('메시지를 보냈습니다:', data);
-
     } else if (ws.readyState === WebSocket.CONNECTING) {
       console.log('WebSocket 연결이 아직 진행 중입니다.');
     } else {
@@ -166,18 +210,44 @@
   }
 
   function getCurrentTime() {
-    var now = new Date();
-    var year = now.getFullYear();
-    var month = String(now.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 1을 더함
-    var day = String(now.getDate()).padStart(2, '0');
-    var hours = String(now.getHours()).padStart(2, '0');
-    var minutes = String(now.getMinutes()).padStart(2, '0');
-    var seconds = String(now.getSeconds()).padStart(2, '0');
+    let now = new Date();
+    let year = now.getFullYear();
+    let month = String(now.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 1을 더함
+    let day = String(now.getDate()).padStart(2, '0');
+    let hours = String(now.getHours()).padStart(2, '0');
+    let minutes = String(now.getMinutes()).padStart(2, '0');
+    let seconds = String(now.getSeconds()).padStart(2, '0');
 
     // YYYY-MM-DD HH:mm:ss
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
   }
 
+  function togglePopup() {
+    let overlay = document.getElementById('overlay');
+    if (overlay.style.display === 'flex') {
+      overlay.style.display = 'none';
+    } else {
+      overlay.style.display = 'flex';
+    }
+  }
+
+  function exitRoom() {
+    let data = {
+      userId: userId,
+      roomId: roomId
+    }
+    // API 호출
+    openModal();
+    postApi('/exitRoom', data, onExitRoomSuccess, onApiError);
+  }
+
+  function onExitRoomSuccess(data) {
+    closeModal();
+    alert(data.msg);
+    window.location.replace('/chats');
+  }
+
 </script>
+
 </body>
 </html>

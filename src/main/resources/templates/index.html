@@ -20,7 +20,7 @@
 <main class="friends">
   <div class="search-bar">
     <i class="fa fa-search"></i>
-    <input type="text" id="findFriend" onkeyup="enterFindFriend()" placeholder="아이디를 입력하여 채팅을 시작"/>
+    <input type="text" placeholder="이름을 검색해 보세요." onkeyup="searchFriend(this)" />
   </div>
 
   <!-- 나의 프로필 -->
@@ -60,6 +60,10 @@
       <!-- 나머지 친구목록 -->
     </div>
   </section>
+
+  <div class="chat-btn" onclick="enterFindFriend()">
+    <i class="fa fa-user"></i>
+  </div>
 </main>
 
 <th:block th:replace="layout/fragments/footer.html :: footerFragment"/>
@@ -107,15 +111,19 @@
   }
 
   function enterFindFriend() {
-    if (window.event.keyCode === 13) {
-      var data = {
-        userId: $('#findFriend').val()
-      }
+    var findUserId = prompt("검색하실 유저 아이디를 입력해주세요.")
 
-      // API 호출
-      openModal();
-      postApi('/findFriend', data, onFindFriendSuccess, onApiError);
+    if(!findUserId || findUserId === ''){
+      return;
     }
+
+    var data = {
+      userId: findUserId
+    }
+
+    // API 호출
+    openModal();
+    postApi('/findFriend', data, onFindFriendSuccess, onApiError);
   }
 
   function onFindFriendSuccess(data) {
@@ -147,6 +155,22 @@
     closeModal();
     alert(data.msg);
     window.location.replace('/');
+  }
+
+  function searchFriend(input) {
+    let filter = input.value.toUpperCase();
+    let div = document.getElementsByClassName("friends__section-rows");
+
+    for (let i = 0; i < div.length; i++) {
+      let chatUser = div[i].getElementsByClassName("friends__section-name")[0];
+      let txtValue = chatUser.textContent || chatUser.innerText;
+
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        div[i].style.display = "";
+      } else {
+        div[i].style.display = "none";
+      }
+    }
   }
 
 </script>

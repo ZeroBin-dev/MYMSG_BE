@@ -6,6 +6,7 @@ import com.myapi.mymsgapi.model.UserLginInfo;
 import com.myapi.mymsgapi.model.UserProfileInfo;
 import com.myapi.mymsgapi.model.vo.UserLginHistVO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -54,5 +55,5 @@ public interface UserDAO {
 
   void updateBookmark(UpdateBookmarkReq params);
 
-  void updateStatMsg(UpdateStatMsgReq params);
+  void updateStatMsg(@Param("statMsg") String statMsg, @Param("userId") String userId);
 }

@@ -20,6 +20,7 @@ import com.myapi.mymsgapi.service.redis.RedisService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -41,6 +42,7 @@ public class UserService {
   /**
    * 로그인 처리
    */
+  @Transactional
   public UserVO userLoginProc(final UserLginReq params) {
     String userId = params.getUserId();
     String userPw = params.getUserPw();
@@ -103,6 +105,7 @@ public class UserService {
   /**
    * 회원가입 처리
    */
+  @Transactional
   public BaseUpdateResponse userJnProc(final UserRegsReq params) {
     BaseUpdateResponse res = new BaseUpdateResponse();
     String userId = params.getUserId(); // 사용자 아이디
@@ -142,6 +145,7 @@ public class UserService {
   /**
    * 친구추가
    */
+  @Transactional
   public BaseUpdateResponse addFriend(final AddFriendReq params) {
     BaseUpdateResponse res = new BaseUpdateResponse();
     int count = _userDAO.selectFindFriend(params);
@@ -178,6 +182,7 @@ public class UserService {
   /**
    * 즐겨찾기 업데이트
    */
+  @Transactional
   public BaseUpdateResponse updateBookmark(final UpdateBookmarkReq params) {
     BaseUpdateResponse res = new BaseUpdateResponse();
     String type = "Y".equals(params.getBookmarkOnOff()) ? "등록" : "해제";
@@ -196,10 +201,11 @@ public class UserService {
   /**
    * 상태메세지 변경
    */
+  @Transactional
   public BaseUpdateResponse updateStatMsg(final UpdateStatMsgReq params) {
     BaseUpdateResponse res = new BaseUpdateResponse();
 
-    _userDAO.updateStatMsg(params);
+    _userDAO.updateStatMsg(params.getStatMsg(), params.getUserId());
 
     UserVO userVO = SessionStore.getAs(SessionKeys.USER_VO, UserVO.class);
     userVO.getLginData().setStatMsg(params.getStatMsg());
@@ -213,6 +219,7 @@ public class UserService {
   /**
    * 프로필사진 변경
    */
+  @Transactional
   public BaseUpdateResponse updateProfileImage(MultipartFile file) {
     BaseUpdateResponse res = new BaseUpdateResponse();
     if (file != null && !file.isEmpty() && file.getSize() <= 102400) { // 100kb 이하

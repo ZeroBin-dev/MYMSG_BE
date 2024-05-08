@@ -18,8 +18,8 @@ public class MainController {
   @LoginCheck(required = true)
   @Operation(summary = "메인", description = "메인페이지 조회")
   public String userMain(final Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
-    String protocol = request.getHeader("x-forwarded-proto");
-    if ("https".equals(protocol)) {
+    String protocol = request.getHeader("referer");
+    if (protocol.startsWith("https:")) {
       String redirectUrl = "http://" + request.getServerName() + request.getRequestURI();
       response.sendRedirect(redirectUrl);
       return null;
