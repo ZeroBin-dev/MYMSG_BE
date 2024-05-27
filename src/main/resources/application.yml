@@ -16,7 +16,7 @@ spring:
       throw-exception-if-no-handler-found: true
 
 server:
-  port: 8831
+  port: 32000
   servlet:
     encoding:
       charset: UTF-8
@@ -72,7 +72,7 @@ spring:
 
   graphql:
     websocket:
-      path: 210.114.6.196:8831
+      path: 210.114.6.196:32000
 
   file:
     profile-path: /dudqls3kr/image/profile/

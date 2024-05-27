@@ -42,11 +42,15 @@ public class ChatHandler extends TextWebSocketHandler {
 
     // 맵에 업데이트
     roomSessionsMap.put(roomId, roomSessions);
-
+    String userId = "";
     // 안읽은갯수만큼 읽음처리
-    HttpSession httpSession = (HttpSession) session.getAttributes().get("httpSession");
-    String userId = ((UserVO)httpSession.getAttribute(SessionKeys.USER_VO.name())).getLginData().getUserId();
-    _redisService.readMessage(roomId, userId);
+    try {
+      HttpSession httpSession = (HttpSession) session.getAttributes().get("httpSession");
+      userId = ((UserVO)httpSession.getAttribute(SessionKeys.USER_VO.name())).getLginData().getUserId();
+      _redisService.readMessage(roomId, userId);
+    }catch (Exception e){
+
+    }
 
     System.out.println("클라이언트 접속 : [ " + userId + " ] : " + roomId);
   }
@@ -66,9 +70,14 @@ public class ChatHandler extends TextWebSocketHandler {
     // 맵에 업데이트
     roomSessionsMap.put(roomId, roomSessions);
 
+    String userId = "";
     // 안읽음처리
-    HttpSession httpSession = (HttpSession) session.getAttributes().get("httpSession");
-    String userId = ((UserVO)httpSession.getAttribute(SessionKeys.USER_VO.name())).getLginData().getUserId();
+    try{
+      HttpSession httpSession = (HttpSession) session.getAttributes().get("httpSession");
+      userId = ((UserVO)httpSession.getAttribute(SessionKeys.USER_VO.name())).getLginData().getUserId();
+    }catch (Exception e){
+
+    }
 
     System.out.println("클라이언트 접속 해제 : [ " + userId + " ] : " + roomId);
   }
@@ -88,12 +97,15 @@ public class ChatHandler extends TextWebSocketHandler {
     ChatMessage chatMessage = ObjectUtil.jsonToObject(message.getPayload(), ChatMessage.class);
 
     // 전체유저 - 현재접속 유저수 빼기
-    HttpSession httpSession = (HttpSession) session.getAttributes().get("httpSession");
-    List<UserRoomInfo> userRoomList = ((UserVO)httpSession.getAttribute(SessionKeys.USER_VO.name())).getRoomList();
-    int totalUser = userRoomList.stream().filter(i -> i.getRoomId().equals(roomId))
-      .mapToInt(i -> Integer.parseInt(i.getMemberCount())).sum();
+    try{
+      HttpSession httpSession = (HttpSession) session.getAttributes().get("httpSession");
+      List<UserRoomInfo> userRoomList = ((UserVO)httpSession.getAttribute(SessionKeys.USER_VO.name())).getRoomList();
+      int totalUser = userRoomList.stream().filter(i -> i.getRoomId().equals(roomId))
+        .mapToInt(i -> Integer.parseInt(i.getMemberCount())).sum();
+      chatMessage.setUnread(String.valueOf(totalUser - roomSessions.size()));
+    }catch (Exception e){
 
-    chatMessage.setUnread(String.valueOf(totalUser - roomSessions.size()));
+    }
     TextMessage textMessage = new TextMessage(ObjectUtil.objectToJsonString(chatMessage));
 
     // 메시지 전송

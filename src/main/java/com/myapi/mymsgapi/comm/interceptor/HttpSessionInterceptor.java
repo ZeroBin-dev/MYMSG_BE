@@ -16,7 +16,7 @@ public class HttpSessionInterceptor extends HttpSessionHandshakeInterceptor {
 
   @Override
   public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler, Map<String, Object> attributes) throws Exception {
-    if (request.getURI().getPath().contains("/ws/chatting")) { // 웹소켓 경로에만 적용
+    if (request.getURI().toString().contains("/ws/")) { // 웹소켓 경로에만 적용
       HttpSession session = getSession(request);
       if (session != null) {
         attributes.put("httpSession", session);

@@ -8,8 +8,8 @@
   </Appenders>
 
   <Loggers>
-    <Logger name="com.myapi.mymsgapi.dao.user.UserDAO" level="trace"/>
-    <Root level="error" >
+    <!-- 모든 패키지에 대한 로깅 레벨을 설정합니다. -->
+    <Root level="error">
       <AppenderRef ref="stdout"/>
     </Root>
   </Loggers>
