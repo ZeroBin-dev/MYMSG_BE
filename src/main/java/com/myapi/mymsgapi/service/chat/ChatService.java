@@ -39,13 +39,13 @@ public class ChatService {
   private final UserDAO _userDao;
   private final RoomDAO _roomDao;
 
-  @Value("${spring.graphql.websocket.path}")
+  @Value("${spring.websocket.path}")
   private String _wsUrl;
 
   /**
    * 대화내용 불러오기
    */
-  public RoomVO getChatMessages(final String roomId) {
+  public RoomVO getChatMessages(final String roomId) throws Exception {
     RoomVO roomVO = new RoomVO();
     // 방기본정보 가져오기
     roomVO.setRoomInfo(_roomDao.selectRoomInfo(roomId));

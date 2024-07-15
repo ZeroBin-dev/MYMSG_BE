@@ -1,6 +1,5 @@
 package com.myapi.mymsgapi.comm.aop;
 
-import com.google.common.base.Joiner;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -18,56 +17,56 @@ import java.util.stream.Collectors;
 @Aspect
 @Slf4j
 public class LogAop {
-
-  @Around("within(com.myapi.mymsgapi..*)")
-  public Object logging(ProceedingJoinPoint pjp) throws Throwable { // 2
-
-    // TODO : 다시 작성 필요
-    String params = getRequestParams(); // request 값 가져오기
-
-    long startAt = System.currentTimeMillis();
-
-//    log.info("-----------> REQUEST : {}({}) = {}", pjp.getSignature().getDeclaringTypeName(),
-//            pjp.getSignature().getName(), params);
-
-    Object result = pjp.proceed(); // 4
-
-    long endAt = System.currentTimeMillis();
-
-//    log.info("-----------> RESPONSE : {}({}) = {} ({}ms)", pjp.getSignature().getDeclaringTypeName(),
-//            pjp.getSignature().getName(), result.toString(), endAt - startAt);
-
-    return result;
-  }
-
-
-  private String paramMapToString(Map<String, String[]> paramMap) {
-    return paramMap.entrySet().stream()
-      .map(entry -> String.format("%s -> (%s)",
-        entry.getKey(), Joiner.on(",").join(entry.getValue())))
-      .collect(Collectors.joining(", "));
-  }
-
-  // Get request values
-  private String getRequestParams() {
-
-    String params = "없음";
-
-    RequestAttributes requestAttributes = RequestContextHolder
-      .getRequestAttributes(); // 3
-
-    if (requestAttributes != null) {
-      HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
-        .getRequestAttributes()).getRequest();
-
-      Map<String, String[]> paramMap = request.getParameterMap();
-      if (!paramMap.isEmpty()) {
-        params = " [" + paramMapToString(paramMap) + "]";
-      }
-    }
-
-    return params;
-
-  }
+//
+//  @Around("within(com.myapi.mymsgapi..*)")
+//  public Object logging(ProceedingJoinPoint pjp) throws Throwable { // 2
+//
+//    // TODO : 다시 작성 필요
+//    String params = getRequestParams(); // request 값 가져오기
+//
+//    long startAt = System.currentTimeMillis();
+//
+////    log.info("-----------> REQUEST : {}({}) = {}", pjp.getSignature().getDeclaringTypeName(),
+////            pjp.getSignature().getName(), params);
+//
+//    Object result = pjp.proceed(); // 4
+//
+//    long endAt = System.currentTimeMillis();
+//
+////    log.info("-----------> RESPONSE : {}({}) = {} ({}ms)", pjp.getSignature().getDeclaringTypeName(),
+////            pjp.getSignature().getName(), result.toString(), endAt - startAt);
+//
+//    return result;
+//  }
+//
+//
+//  private String paramMapToString(Map<String, String[]> paramMap) {
+//    return paramMap.entrySet().stream()
+//      .map(entry -> String.format("%s -> (%s)",
+//        entry.getKey(), Joiner.on(",").join(entry.getValue())))
+//      .collect(Collectors.joining(", "));
+//  }
+//
+//  // Get request values
+//  private String getRequestParams() {
+//
+//    String params = "없음";
+//
+//    RequestAttributes requestAttributes = RequestContextHolder
+//      .getRequestAttributes(); // 3
+//
+//    if (requestAttributes != null) {
+//      HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
+//        .getRequestAttributes()).getRequest();
+//
+//      Map<String, String[]> paramMap = request.getParameterMap();
+//      if (!paramMap.isEmpty()) {
+//        params = " [" + paramMapToString(paramMap) + "]";
+//      }
+//    }
+//
+//    return params;
+//
+//  }
 
 }

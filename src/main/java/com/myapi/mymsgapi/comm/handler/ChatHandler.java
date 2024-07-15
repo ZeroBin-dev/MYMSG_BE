@@ -9,6 +9,7 @@ import com.myapi.mymsgapi.model.vo.UserVO;
 import com.myapi.mymsgapi.service.redis.RedisService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -22,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class ChatHandler extends TextWebSocketHandler {
@@ -52,7 +54,7 @@ public class ChatHandler extends TextWebSocketHandler {
 
     }
 
-    System.out.println("클라이언트 접속 : [ " + userId + " ] : " + roomId);
+    log.info("클라이언트 접속 : [ " + userId + " ] : " + roomId);
   }
 
   // 연결 종료(클라이언트 접속 해제)
@@ -79,7 +81,7 @@ public class ChatHandler extends TextWebSocketHandler {
 
     }
 
-    System.out.println("클라이언트 접속 해제 : [ " + userId + " ] : " + roomId);
+    log.info("클라이언트 접속 해제 : [ " + userId + " ] : " + roomId);
   }
 
   // 메시지 수신

@@ -2,12 +2,14 @@ package com.myapi.mymsgapi.contoller.user;
 
 import com.myapi.mymsgapi.comm.utils.SessionUtil;
 import io.swagger.v3.oas.annotations.Operation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+@Slf4j
 @Controller
 public class UserViewController {
 

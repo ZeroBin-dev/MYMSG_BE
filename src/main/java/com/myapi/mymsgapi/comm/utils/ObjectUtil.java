@@ -1,5 +1,6 @@
 package com.myapi.mymsgapi.comm.utils;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -8,8 +9,12 @@ import org.springframework.util.ObjectUtils;
 
 public class ObjectUtil {
 
+  private static final ObjectMapper objectMapper = new ObjectMapper();
   private static Gson gson = new Gson();
 
+  /**
+   * 빈값 여부
+   */
   public static boolean isEmpty(Object obj) {
     return ObjectUtils.isEmpty(obj);
   }
@@ -18,23 +23,23 @@ public class ObjectUtil {
     return !ObjectUtils.isEmpty(obj);
   }
 
+  /**
+   * 빈값일때 대체값 지정
+   */
   public static Object nvl(Object obj, String defaultValue) {
     return isNotEmpty(obj) ? obj : defaultValue;
   }
 
-  public static <T> T jsonToObject(String jsonString, Class<T> type) {
-    return (jsonString != null) ? gson.fromJson(jsonString, type) : null;
+  public static <T> T jsonToObject(String jsonString, Class<T> clazz) throws Exception {
+    return objectMapper.readValue(jsonString, clazz);
   }
 
-  public static <T> T jsonToObject(JsonObject jsonObject, Class<T> type) {
-    return (jsonObject != null) ? gson.fromJson(jsonObject, type) : null;
+
+  public static String objectToJsonString(Object obj) throws Exception{
+    return objectMapper.writeValueAsString(obj);
   }
 
-  public static String objectToJsonString(Object obj) throws Exception {
-    return new ObjectMapper().writeValueAsString(obj);
-  }
-
-  public static JsonObject toJson(final String p) {
+  public static JsonObject toJson(final String p) throws Exception {
     JsonParser jsonParser = new JsonParser();
     Object obj = jsonParser.parse(p);
     JsonObject jo = (JsonObject) obj;

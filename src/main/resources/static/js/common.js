@@ -22,7 +22,6 @@ function postApi(url, params, successCallback, errorCallback) {
 }
 
 function multiApi(url, formData, successCallback, errorCallback) {
-  console.log("formData : " + JSON.stringify(formData));
 
   $.ajax({
     type: 'POST',

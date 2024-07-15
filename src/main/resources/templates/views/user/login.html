@@ -92,7 +92,6 @@
         window.location.replace('/user/chngPw')
       }
 
-      console.log("err >> " + JSON.stringify(err));
       alert(errMsg);
     }
 
@@ -129,7 +128,6 @@
       var errCd = err.responseJSON?.exception?.errorCode;
       var errMsg = err.responseJSON?.exception?.errorMessage;
 
-      console.log("err >> " + JSON.stringify(err));
       alert(errMsg);
     }
 

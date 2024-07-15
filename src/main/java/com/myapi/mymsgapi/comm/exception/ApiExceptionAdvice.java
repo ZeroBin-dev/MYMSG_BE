@@ -2,30 +2,32 @@ package com.myapi.mymsgapi.comm.exception;
 
 import com.myapi.mymsgapi.comm.types.ExceptType;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.nio.file.AccessDeniedException;
 
+@Slf4j
 @ControllerAdvice
 public class ApiExceptionAdvice {
 
   @ExceptionHandler({YbBizException.class})
-  public ResponseEntity<ApiResult> exceptionHandler(HttpServletRequest request, final YbBizException e) {
+  public ResponseEntity<ApiResult> exceptionHandler(final YbBizException e) {
 
     ApiExceptionEntity apiExceptionEntity = ApiExceptionEntity.builder()
       .errorCode(e.getError().getCode())
-      .errorMessage(e.getError().getMessage())
+      .errorMessage(e.getMessage())
       .build();
 
-    e.printStackTrace();
+    log.error(e.getMessage());
 
     return ResponseEntity
       .status(e.getError().getStatus())
       .body(ApiResult.builder()
-        .status("error")
-        .message("오류")
+        .status("ERROR")
+        .message("YbBizException")
         .exception(apiExceptionEntity)
         .build());
   }

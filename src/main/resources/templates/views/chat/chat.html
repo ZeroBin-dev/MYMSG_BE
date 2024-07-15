@@ -134,7 +134,7 @@
 
   ws.onopen = function () {
     closeModal();
-    console.log('소켓연결성공');
+    console.log('입장성공');
   };
 
   ws.onmessage = function (event) {
@@ -183,7 +183,6 @@
 
   ws.onerror = function (error) {
     closeModal();
-    console.log(error);
     alert('소켓 연결중 오류가 발생하였습니다. 잠시 후 다시 이용해 주시길 바랍니다.');
     window.location.replace('/chats');
   };

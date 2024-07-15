@@ -54,7 +54,7 @@ public class RedisService {
   /**
    * 방번호별 대화내용 가져오기
    */
-  public List<ChatMessage> getRoomMessageList(final String roomId) {
+  public List<ChatMessage> getRoomMessageList(final String roomId) throws Exception {
     ArrayList<ChatMessage> chatMessages = new ArrayList<>();
 
     List<String> messages = __getList(this.__setRoomId(roomId));
@@ -172,7 +172,7 @@ public class RedisService {
   /**
    * redis get list last data
    */
-  private JsonObject __getLast(final String key) {
+  private JsonObject __getLast(final String key) throws Exception {
     List<String> values = _redisTemplate.opsForList().range(key, -1, -1);
     return (values != null && !values.isEmpty()) ? ObjectUtil.toJson(values.get(0)) : null;
   }

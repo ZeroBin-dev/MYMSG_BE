@@ -32,7 +32,7 @@ public class ChatViewController {
 
   @GetMapping(value = "/chat/{roomId}")
   @LoginCheck(required = true)
-  public String chat(final Model model, @PathVariable String roomId) {
+  public String chat(final Model model, @PathVariable String roomId) throws Exception {
     model.addAttribute("roomVO", _chatService.getChatMessages(roomId));
     model.addAttribute("userVO", SessionStore.getAs(SessionKeys.USER_VO, UserVO.class));
     model.addAttribute("wsUrl", _chatService.getWsUrl());

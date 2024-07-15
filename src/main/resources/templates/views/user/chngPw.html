@@ -41,7 +41,6 @@
         },
         data: JSON.stringify(userData),
         success: function (data) {
-          console.log("data >> " + data);
           if (data.lginYn === 'Y') {
             window.location.replace('/main');
           } else {
@@ -56,7 +55,6 @@
             window.location.replace('/user/chngPw')
           }
 
-          console.log("err >> " + JSON.stringify(err));
           alert(err.responseJSON.exception.errorMessage);
         }
       });

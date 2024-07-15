@@ -37,20 +37,21 @@ spring:
     username: dudqls3kr
     password: dkapflRksh1!
 
+  log:
+    file-path: D:\logs\mymsg\mymsg.log
+
   data:
     redis:
       port: 6379
       host: 127.0.0.1
       password: admin
 
-  graphql:
-    websocket:
-      path: 192.168.202.13:8831
+  websocket:
+    path: 192.168.202.13:32000
 
   file:
     profile-path: file:///D:/zeroBin/profile/
     profile-upload-path: D:/zeroBin/profile/
-
 
 ---
 spring:
@@ -64,15 +65,18 @@ spring:
     username: dudqls3kr
     password: dkapflRksh1!
 
+  log:
+    file-path: /dudqls3kr/logs/mymsg/mymsg.log
+
   data:
     redis:
       port: 22529
       host: dudqls4kr.cafe24.com
       password:
 
-  graphql:
-    websocket:
-      path: 210.114.6.196:32000
+
+  websocket:
+    path: 210.114.6.196:32000
 
   file:
     profile-path: /dudqls3kr/image/profile/
